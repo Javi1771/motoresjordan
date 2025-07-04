@@ -1,137 +1,176 @@
 "use client";
-
-import Image from "next/image";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { FaIndustry, FaHandsHelping, FaImages, FaPhoneAlt, FaLeaf, FaCog, FaBolt, FaWater } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, Menu, X, MessageCircle } from 'lucide-react';
+import Servicios from '../components/Servicios';
+import Contacto from '../components/Contacto';
+import Nosotros from '../components/Nosotros';
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const stats = [
+    { number: "25+", label: "Años de experiencia" },
+    { number: "500+", label: "Proyectos completados" },
+    { number: "100%", label: "Satisfacción garantizada" },
+    { number: "24/7", label: "Soporte técnico" }
+  ];
+
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent('Hola, me interesa solicitar una cotización para equipos de bombeo. ¿Podrían ayudarme?');
+    window.open(`https://wa.me/524423919520?text=${message}`, '_blank');
+  };
+
+  const handleEmailContact = () => {
+    window.open('mailto:contacto@motoresjordanmx.com?subject=Solicitud de Cotización&body=Hola, me interesa solicitar una cotización para equipos de bombeo. Por favor contáctenme.', '_blank');
+  };
+
   return (
-    <main className="relative min-h-screen bg-[#121213] text-[#F5F5F6] overflow-hidden font-sans">
-
-      {/* Fondo con engranes gigantes girando */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 60, ease: "linear" }}
-        className="absolute -top-64 -left-64 w-[1000px] h-[1000px] opacity-10 z-0"
-      >
-        <Image
-          src="/04858583-aab9-47f2-8475-44e93fc138df.png"
-          alt="Fondo engranes"
-          fill
-          style={{ objectFit: "contain" }}
-          className="blur-sm"
-        />
-      </motion.div>
-
-      {/* Grid overlay futurista */}
-      <div className="absolute inset-0 bg-[radial-gradient(#6E6F71_1px,transparent_1px)] [background-size:20px_20px] opacity-5 z-0 animate-pulse"></div>
-
-      {/* Header */}
-      <header className="relative z-20 flex justify-between items-center p-6 backdrop-blur-xl bg-[#222223]/30 border-b border-[#6E6F71]/20">
-        <Image src="/logo.jpg" alt="Logo Jordan" width={100} height={80} className="rounded-md shadow-xl" />
-        <nav className="flex gap-8">
-          <Link href="/quienes-somos">
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              className="flex items-center gap-2 text-[#F5F5F6] hover:text-[#F43F48] transition duration-300"
-            >
-              <FaHandsHelping /> Quiénes Somos
-            </motion.div>
-          </Link>
-          <Link href="/contacto">
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              className="flex items-center gap-2 text-[#F5F5F6] hover:text-[#F43F48] transition duration-300"
-            >
-              <FaPhoneAlt /> Contacto
-            </motion.div>
-          </Link>
-          <Link href="/galeria-proveedores">
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              className="flex items-center gap-2 text-[#F5F5F6] hover:text-[#F43F48] transition duration-300"
-            >
-              <FaImages /> Galería
-            </motion.div>
-          </Link>
-        </nav>
-      </header>
-
-      {/* Hero principal */}
-      <section className="relative z-20 flex flex-col md:flex-row items-center justify-center flex-grow p-12 gap-16">
-
-        <motion.div
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, type: "spring" }}
-          className="bg-[#F5F5F6]/10 border border-[#FC6D74]/30 rounded-3xl p-8 shadow-[0_0_30px_#F43F48] backdrop-blur-xl max-w-xl"
+    <div className="min-h-screen bg-[#000000] text-white">
+      {/* Floating WhatsApp Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button
+          onClick={handleWhatsApp}
+          className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 animate-pulse"
+          aria-label="Contactar por WhatsApp"
         >
-          <h1 className="text-6xl font-extrabold mb-6 bg-gradient-to-r from-[#F43F48] via-[#BE171F] to-[#47080B] bg-clip-text text-transparent flex items-center gap-4">
-            <FaIndustry className="text-[#F43F48] animate-pulse" /> Jordan
-          </h1>
-          <p className="text-lg text-[#E6E6E7] mb-8">
-            Bombas, reductores y sistemas que impulsan el futuro. Control total de potencia y eficiencia energética.
-          </p>
-          <Link href="/contacto">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              className="px-8 py-4 bg-[#E22029] text-white rounded-xl shadow-[0_0_20px_#F43F48] hover:bg-[#9D171D] transition"
+          <MessageCircle className="w-8 h-8" />
+        </button>
+      </div>
+
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrollY > 50 ? 'bg-[#000000] bg-opacity-95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+      }`}>
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">J</span>
+              </div>
+              <span className="text-xl font-bold">Jordan</span>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#services" className="hover:text-[#BE171F] transition-colors">Servicios</a>
+              <a href="#about" className="hover:text-[#BE171F] transition-colors">Nosotros</a>
+              <a href="#contact" className="hover:text-[#BE171F] transition-colors">Contacto</a>
+              <button 
+                onClick={handleWhatsApp}
+                className="bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-2 rounded-full hover:shadow-lg transition-all"
+              >
+                Cotizar
+              </button>
+            </div>
+
+            <button 
+              className="md:hidden text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              Contáctanos
-            </motion.button>
-          </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5 }}
-          className="flex justify-center"
-        >
-          <Image
-            src="/PORTADA_JORDAN_sin_fondo.png"
-            alt="Portada Jordan"
-            width={420}
-            height={420}
-            className="drop-shadow-[0_0_30px_#F43F48]"
-          />
-        </motion.div>
-      </section>
-
-      {/* Section ambiental super glass */}
-      <section className="relative z-20 flex flex-col items-center justify-center gap-4 py-14 px-4">
-        <motion.div
-          initial={{ scale: 0.8, rotate: -10 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 2, type: "spring" }}
-          className="p-6 bg-[#F5F5F6]/10 border border-[#8E8F91]/30 backdrop-blur-xl rounded-2xl shadow-[0_0_20px_#6E6F71]"
-        >
-          <Image
-            src="/triangulo_sin_fondo.png"
-            alt="Triángulo"
-            width={120}
-            height={120}
-            className="mb-4"
-          />
-        </motion.div>
-        <h2 className="text-3xl font-bold flex items-center gap-3 bg-gradient-to-r from-[#F43F48] to-[#BE171F] bg-clip-text text-transparent animate-pulse">
-          <FaLeaf /> Ahorro de agua y energía
-        </h2>
-        <p className="text-[#D0D0D1] max-w-2xl text-center">
-          Con tecnología avanzada reducimos consumos y elevamos la productividad. Comprometidos con el medio ambiente y el ahorro energético.
-        </p>
-      </section>
-
-      {/* Footer potente */}
-      <footer className="relative z-20 bg-[#222223]/90 backdrop-blur-xl border-t border-[#6E6F71]/20 py-4 text-center text-[#F5F5F6]">
-        <div className="flex justify-center gap-6 text-xl mb-2">
-          <FaCog className="animate-spin-slow" />
-          <FaBolt className="animate-ping text-[#F43F48]" />
-          <FaWater className="animate-bounce" />
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
-        © {new Date().getFullYear()} Moto Bombas y Reductores Jordán S.A. de C.V. • Todos los derechos reservados
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-[#000000] bg-opacity-95 backdrop-blur-sm">
+            <div className="px-6 py-4 space-y-4">
+              <a href="#services" className="block hover:text-[#BE171F] transition-colors">Servicios</a>
+              <a href="#about" className="block hover:text-[#BE171F] transition-colors">Nosotros</a>
+              <a href="#contact" className="block hover:text-[#BE171F] transition-colors">Contacto</a>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#000000] via-[#262626] to-[#BE171F]"></div>
+        
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <div className="mb-8">
+            <div className="w-32 h-32 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full mx-auto flex items-center justify-center mb-6 shadow-2xl">
+              <span className="text-4xl font-bold text-white">J</span>
+            </div>
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight">
+            Moto-Bombas y Reductores
+            <br />
+            <span className="text-[#BE171F]">Jordan S.A de C.V.</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-[#8E8F91] mb-8 max-w-2xl mx-auto">
+            Potenciando el bombeo, control y potencia de tus proyectos con 
+            <span className="text-[#BE171F] font-semibold"> tecnología de vanguardia</span>
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <button
+              onClick={handleWhatsApp}
+              className="bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-8 py-4 rounded-full text-white font-semibold hover:shadow-2xl transition-all duration-300"
+            >
+              <span className="flex items-center">
+                Contáctanos por WhatsApp
+                <MessageCircle className="ml-2" size={20} />
+              </span>
+            </button>
+            <button
+              onClick={handleEmailContact}
+              className="border-2 border-[#8E8F91] px-8 py-4 rounded-full text-[#8E8F91] font-semibold hover:bg-[#8E8F91] hover:text-white transition-all duration-300"
+            >
+              Cotizar por Email
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl font-bold text-[#BE171F] mb-2">{stat.number}</div>
+                <div className="text-sm text-[#8E8F91]">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Import Components */}
+      <Servicios />
+      <Nosotros />
+      <Contacto />
+
+      {/* Footer */}
+      <footer className="bg-[#000000] border-t border-[#4E4F50] py-12">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">J</span>
+              </div>
+              <span className="text-2xl font-bold text-white">Moto-Bombas y Reductores Jordan S.A de C.V.</span>
+            </div>
+            <p className="text-[#8E8F91] mb-6">
+              Potenciando el bombeo, control y potencia de tus proyectos desde 1999
+            </p>
+            <div className="flex justify-center space-x-6 text-[#8E8F91]">
+              <a href="#services" className="hover:text-[#BE171F] transition-colors">Servicios</a>
+              <a href="#about" className="hover:text-[#BE171F] transition-colors">Nosotros</a>
+              <a href="#contact" className="hover:text-[#BE171F] transition-colors">Contacto</a>
+            </div>
+            <div className="mt-8 pt-8 border-t border-[#4E4F50] text-[#6B6C6F]">
+              <p>&copy; 2025 Moto-Bombas y Reductores Jordan S.A de C.V. Todos los derechos reservados.</p>
+            </div>
+          </div>
+        </div>
       </footer>
-    </main>
+    </div>
   );
 }
