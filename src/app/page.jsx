@@ -1,16 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Menu,
-  X,
-  MessageCircle,
-  Droplet,
-  Zap,
-  CheckCircle,
-  Award,
-  Settings,
-  Leaf,
-} from "lucide-react";
+import { Menu, X, Users, Droplet, Zap, CheckCircle, Award, Leaf, } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import Particles from "../components/Particles";
@@ -38,7 +28,7 @@ export default function Home() {
         setShowSideCards(newScrollY < heroHeight - 100);
       }
 
-      // Determinar sección activa
+      //* Determinar sección activa
       const sections = [
         { id: "hero", ref: heroRef },
         { id: "services", ref: servicesRef },
@@ -228,37 +218,174 @@ export default function Home() {
         {/* Tarjetas laterales (desktop) */}
         {showSideCards && (
           <>
-            <div className="hidden lg:block absolute left-[3%] top-1/2 transform -translate-y-1/2 w-[26vw] min-w-[280px] max-w-[380px] z-10 transition-transform hover:translate-x-4">
-              <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6 shadow-2xl border border-[#2e2e2e] relative overflow-hidden group">
-                <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl transition-opacity"></div>
+            {/* Izquierda */}
+            <div
+              className="hidden lg:block absolute left-[3%] top-1/2 transform -translate-y-1/2
+                 w-[26vw] min-w-[280px] max-w-[380px] z-10
+                 transition-transform hover:translate-x-4"
+            >
+              <div
+                className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6
+                   border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden
+                   transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
+              >
+                <div
+                  className="absolute -top-20 -right-20 w-60 h-60 bg-[#BE171F]
+                        rounded-full opacity-10 blur-3xl transition-opacity"
+                />
                 <img
                   src="/triangulo.png"
                   alt="Ahorro de agua y energía"
                   className="w-40 lg:w-48 h-40 lg:h-48 object-contain mx-auto mb-4"
                 />
-                <h3 className="text-lg lg:text-xl font-bold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
+                <h3
+                  className="text-lg lg:text-xl font-bold mb-2 text-center
+                     bg-clip-text text-transparent
+                     bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
+                >
                   Potenciamos el ahorro de agua y energía
                 </h3>
-                <p className="text-xs lg:text-sm text-[#8E8F91] text-center">
+                <p className="text-xs lg:text-sm text-[#8E8F91] text-center mb-4">
                   Tecnología avanzada que optimiza recursos y maximiza
                   eficiencia
                 </p>
+
+                {/* Features */}
+                <div className="space-y-3">
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Droplet className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Reducción de consumo
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Hasta 40% menos de agua utilizada
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Eficiencia energética
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Sistemas que reducen costos eléctricos
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Leaf className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Sostenibilidad
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Soluciones eco-amigables
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="hidden lg:block absolute right-[3%] top-1/2 transform -translate-y-1/2 w-[26vw] min-w-[280px] max-w-[380px] z-10 transition-transform hover:-translate-x-4">
-              <div className="bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6 shadow-2xl border border-[#2e2e2e] relative overflow-hidden group">
-                <div className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl transition-opacity"></div>
+
+            {/* Derecha */}
+            <div
+              className="hidden lg:block absolute right-[3%] top-1/2 transform -translate-y-1/2
+                 w-[26vw] min-w-[280px] max-w-[380px] z-10
+                 transition-transform hover:-translate-x-4"
+            >
+              <div
+                className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6
+                   border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden
+                   transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
+              >
+                <div
+                  className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F]
+                        rounded-full opacity-10 blur-3xl transition-opacity"
+                />
                 <img
                   src="/Engranajes.png"
                   alt="Excelencia en procesos"
                   className="w-40 lg:w-48 h-40 lg:h-48 object-contain mx-auto mb-4"
                 />
-                <h3 className="text-lg lg:text-xl font-bold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
+                <h3
+                  className="text-lg lg:text-xl font-bold mb-2 text-center
+                     bg-clip-text text-transparent
+                     bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
+                >
                   Excelencia en procesos
                 </h3>
-                <p className="text-xs lg:text-sm text-[#8E8F91] text-center">
+                <p className="text-xs lg:text-sm text-[#8E8F91] text-center mb-4">
                   Sistemas robustos y soluciones confiables
                 </p>
+
+                {/* Features */}
+                <div className="space-y-3">
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Award className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Calidad garantizada
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Materiales de primera calidad
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Tecnología avanzada
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Sistemas de última generación
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
+                       transition-colors duration-300 group-hover:border-[#FF073A]"
+                  >
+                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Soporte experto
+                      </p>
+                      <p className="text-xs text-[#8E8F91]">
+                        Equipo técnico especializado
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </>
@@ -277,12 +404,12 @@ export default function Home() {
               src="/logo.jpg"
               alt="Logo Jordan"
               className="
-      mx-auto mb-4
-      w-[29.4rem]     /* ~21rem ×1.4 */
-      sm:w-[33.6rem]  /* ~24rem ×1.4 */
-      md:w-[36.4rem]  /* ~26rem ×1.4 */
-      h-auto object-contain
-    "
+                mx-auto mb-4
+                w-[29.4rem]     /* ~21rem ×1.4 */
+                sm:w-[33.6rem]  /* ~24rem ×1.4 */
+                md:w-[36.4rem]  /* ~26rem ×1.4 */
+                h-auto object-contain
+              "
             />
           </div>
 
@@ -338,72 +465,190 @@ export default function Home() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {stats.map((s, i) => (
               <div
                 key={i}
-                className="p-4 rounded-xl border border-[#2e2e2e] hover:border-[#BE171F] transition-all"
+                className="
+                  group
+                  flex flex-col items-center
+                  p-6 rounded-2xl
+                  bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60
+                  backdrop-blur-lg
+                  border-2 border-[#2e2e2e]/70
+                  shadow-xl
+                  transition-all duration-300
+                  hover:border-[#FF073A]
+                  hover:shadow-[0_0_8px_#FF073A]
+                "
               >
-                <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48] mb-1">
+                <div
+                  className="text-3xl font-extrabold mb-2
+                      bg-clip-text text-transparent
+                      bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
+                >
                   {s.number}
                 </div>
-                <div className="text-sm text-[#8E8F91]">{s.label}</div>
+                <div className="text-xs uppercase tracking-wider text-[#8E8F91]">
+                  {s.label}
+                </div>
               </div>
             ))}
           </div>
 
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((f, i) => (
               <div
                 key={i}
-                className="p-5 rounded-xl border border-[#2e2e2e] hover:border-[#BE171F] transition-all"
+                className="
+                  group
+                  flex flex-col items-center text-center
+                  p-8 rounded-2xl
+                  bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60
+                  backdrop-blur-lg
+                  border-2 border-[#2e2e2e]/70
+                  shadow-xl
+                  transition-all duration-300
+                  hover:border-[#FF073A]
+                  hover:shadow-[0_0_8px_#FF073A]
+                "
               >
-                <div className="mb-4 flex justify-center">
-                  <div className="p-3 rounded-full bg-gray-900">{f.icon}</div>
+                {/* Icono dentro de círculo */}
+                <div
+                  className="
+                    w-12 h-12 mb-4
+                    flex items-center justify-center
+                    rounded-full
+                    bg-[#FF073A]/80
+                    transition-transform duration-300
+                    group-hover:scale-110
+                  "
+                >
+                  {React.cloneElement(f.icon, {
+                    className: "w-6 h-6 text-white",
+                  })}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-center">
+
+                <h3 className="text-xl font-semibold text-white mb-2">
                   {f.title}
                 </h3>
-                <p className="text-sm text-[#8E8F91] text-center">
-                  {f.description}
-                </p>
+                <p className="text-sm text-[#8E8F91]">{f.description}</p>
+
+                {/* Línea decorativa */}
+                <span
+                  className="
+                    mt-6 w-12 h-1 rounded-full
+                    bg-gradient-to-r from-[#BE171F] to-[#F43F48]
+                    opacity-60 group-hover:opacity-100
+                    transition-opacity duration-300
+                  "
+                ></span>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Mobile Cards – apiladas verticalmente */}
-        <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto mt-10 px-4 flex flex-col gap-6 pb-12">
-          {[
-            {
-              img: "/triangulo.png",
-              title: "Potenciamos el ahorro de agua y energía",
-              text: "Tecnología avanzada que optimiza recursos y maximiza eficiencia",
-            },
-            {
-              img: "/Engranajes.png",
-              title: "Excelencia en procesos",
-              text: "Sistemas robustos y soluciones confiables",
-            },
-          ].map((c, i) => (
-            <div
-              key={i}
-              className="w-full bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-5 shadow-xl border border-[#2e2e2e] transition-all"
-            >
-              <img
-                src={c.img}
-                alt=""
-                className="mx-auto mb-4 w-32 h-auto object-contain"
-              />
-              <h3 className="text-lg font-bold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
-                {c.title}
-              </h3>
-              <p className="text-sm text-[#8E8F91] text-center">{c.text}</p>
-            </div>
-          ))}
-        </div>
       </section>
+
+      {/* Mobile Cards – apiladas verticalmente */}
+      <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto mt-10 px-4 flex flex-col gap-6 pb-12">
+        {[
+          {
+            img: "/triangulo.png",
+            title: "Potenciamos el ahorro de agua y energía",
+            text: "Tecnología avanzada que optimiza recursos y maximiza eficiencia",
+            features: [
+              {
+                Icon: Droplet,
+                title: "Reducción de consumo",
+                text: "Hasta 40% menos de agua utilizada",
+              },
+              {
+                Icon: Zap,
+                title: "Eficiencia energética",
+                text: "Sistemas que reducen costos eléctricos",
+              },
+              {
+                Icon: Leaf,
+                title: "Sostenibilidad",
+                text: "Soluciones eco-amigables",
+              },
+            ],
+          },
+          {
+            img: "/Engranajes.png",
+            title: "Excelencia en procesos",
+            text: "Sistemas robustos y soluciones confiables",
+            features: [
+              {
+                Icon: Award,
+                title: "Calidad garantizada",
+                text: "Materiales de primera calidad",
+              },
+              {
+                Icon: Zap,
+                title: "Tecnología avanzada",
+                text: "Sistemas de última generación",
+              },
+              {
+                Icon: Users,
+                title: "Soporte experto",
+                text: "Equipo técnico especializado",
+              },
+            ],
+          },
+        ].map((c, i) => (
+          <div
+            key={i}
+            className="
+              group
+              w-full
+              bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a]
+              rounded-2xl p-5 shadow-xl
+              border-2 border-[#2e2e2e]
+              transition-all duration-300
+              hover:border-[#FF073A]
+              hover:shadow-[0_0_8px_#FF073A]
+            "
+          >
+            <img
+              src={c.img}
+              alt=""
+              className="mx-auto mb-4 w-32 h-auto object-contain"
+            />
+            <h3 className="text-lg font-bold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
+              {c.title}
+            </h3>
+            <p className="text-sm text-[#8E8F91] text-center">{c.text}</p>
+
+            {/* Features */}
+            <div className="space-y-3 mt-4">
+              {c.features.map((f, j) => (
+                <div
+                  key={j}
+                  className="
+                    flex items-start gap-4 p-3
+                    border-2 border-[#2e2e2e]
+                    rounded-lg
+                    transition-colors duration-300
+                    group-hover:border-[#FF073A]
+                  "
+                >
+                  <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
+                    <f.Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      {f.title}
+                    </p>
+                    <p className="text-xs text-[#8E8F91]">{f.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Secciones auxiliares */}
       <div ref={servicesRef}>
