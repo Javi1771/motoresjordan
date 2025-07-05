@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight, ArrowRight, Zap, Award, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { SiGoogleearthengine } from "react-icons/si";
 
 export default function Servicios() {
   const services = [
@@ -44,6 +45,7 @@ export default function Servicios() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const scroll = (direction) => {
     const container = carouselRef.current;
@@ -56,6 +58,10 @@ export default function Servicios() {
     
     container.scrollTo({ left: newPosition, behavior: 'smooth' });
     setScrollPosition(newPosition);
+    
+    // Actualizar slide actual
+    const newSlide = Math.round(newPosition / (container.scrollWidth / providers.length));
+    setCurrentSlide(newSlide);
   };
 
   // Auto-scroll para el carrusel
@@ -70,14 +76,16 @@ export default function Servicios() {
       if (newPosition >= maxScroll) {
         container.scrollTo({ left: 0, behavior: 'smooth' });
         setScrollPosition(0);
+        setCurrentSlide(0);
       } else {
         container.scrollTo({ left: newPosition, behavior: 'smooth' });
         setScrollPosition(newPosition);
+        setCurrentSlide(Math.round(newPosition / (container.scrollWidth / providers.length)));
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [scrollPosition, maxScroll, isAutoPlaying]);
+  }, [scrollPosition, maxScroll, isAutoPlaying, providers.length]);
 
   useEffect(() => {
     const container = carouselRef.current;
@@ -165,7 +173,7 @@ export default function Servicios() {
                     style={{ animationDelay: `${i * 100}ms` }}
                   >
                     <div className="mr-4 bg-gradient-to-r from-red-500 to-red-600 p-2 rounded-full shadow-lg">
-                      <Star className="w-4 h-4 text-white" />
+                      <SiGoogleearthengine className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-gray-200 font-medium flex-1">{feature}</span>
                   </div>
@@ -182,13 +190,13 @@ export default function Servicios() {
           ))}
         </div>
 
-        {/* Sección de proveedores mejorada */}
+        {/* Sección de proveedores con carrusel premium */}
         <div className="mt-32 relative">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
           
           <div className="text-center mb-16 pt-12">
             <div className="inline-block mb-6">
-              <span className="text-sm font-medium text-amber-400 bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
+              <span className="text-sm font-medium text-red-400 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
                 NUESTROS SOCIOS
               </span>
             </div>
@@ -201,46 +209,100 @@ export default function Servicios() {
             </p>
           </div>
 
-          {/* Carrusel mejorado con animación automática */}
+          {/* Carrusel premium con diseño mejorado */}
           <div 
-            className="relative py-8"
+            className="relative py-16"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
           >
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Efecto de partículas en movimiento */}
+              <div className="absolute top-0 left-0 w-full h-full opacity-20">
+                {[...Array(20)].map((_, i) => (
+                  <div 
+                    key={i}
+                    className="absolute rounded-full"
+                    style={{
+                      top: `${Math.random() * 100}%`,
+                      left: `${Math.random() * 100}%`,
+                      width: `${Math.random() * 20 + 5}px`,
+                      height: `${Math.random() * 20 + 5}px`,
+                      background: 'radial-gradient(circle, rgba(190,23,31,0.8) 0%, transparent 70%)',
+                      animation: `float${Math.floor(Math.random() * 3) + 1} ${Math.random() * 10 + 10}s infinite linear`,
+                      transform: `scale(${Math.random() + 0.5})`
+                    }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={() => scroll('left')}
               disabled={scrollPosition === 0}
-              className={`absolute left-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-sm rounded-full p-4 z-20 transition-all duration-300 ${
+              className={`absolute left-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-md rounded-full p-4 z-20 transition-all duration-300 ${
                 scrollPosition === 0 
                   ? 'opacity-30 cursor-not-allowed' 
                   : 'hover:from-red-600 hover:to-red-700 hover:scale-110 shadow-lg hover:shadow-red-500/30'
               }`}
             >
-              <ChevronLeft className="w-6 h-6 text-white" />
+              <ChevronLeft className="w-8 h-8 text-white" />
             </button>
             
             <div
               ref={carouselRef}
-              className="flex overflow-x-auto scroll-smooth space-x-8 px-20 pb-6 hide-scrollbar"
+              className="flex overflow-x-auto scroll-smooth space-x-8 px-16 pb-6 hide-scrollbar"
               onScroll={(e) => setScrollPosition(e.target.scrollLeft)}
             >
               {providers.map((file, i) => (
                 <div 
                   key={i} 
-                  className="flex-shrink-0 w-48 h-48 bg-gradient-to-br from-[#1f1f1f] to-[#0f0f0f] p-6 rounded-2xl shadow-2xl flex items-center justify-center border border-[#333] transform transition-all duration-700 hover:border-red-500/50 hover:scale-105 hover:shadow-red-500/20 hover:-translate-y-2 group"
+                  className="flex-shrink-0 w-64 h-64 bg-gradient-to-br from-[#1f1f1f] to-[#0f0f0f] p-8 rounded-3xl shadow-2xl flex items-center justify-center border border-[#333] transform transition-all duration-700 hover:border-red-500/50 hover:scale-105 hover:shadow-red-500/20 hover:-translate-y-3 group perspective-1000"
                 >
-                  <div className="relative w-full h-full rounded-xl overflow-hidden">
+                  <div className="relative w-full h-full rounded-xl overflow-hidden transform-style-3d transition-transform duration-700 group-hover:rotate-y-6 group-hover:rotate-x-2">
                     {/* Efecto de brillo */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
                     
-                    <img
-                      src={`/${file}`}
-                      alt={file}
-                      className="w-full h-full object-contain filter brightness-90 grayscale hover:grayscale-0 hover:brightness-110 transition-all duration-700 transform group-hover:scale-110"
-                    />
+                    {/* Fondo de tarjeta con patrón sutil */}
+                    <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-700">
+                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-red-500/10 to-transparent"></div>
+                    </div>
                     
-                    {/* Overlay con gradiente */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+                    {/* Contenido principal */}
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <img
+                        src={`/${file}`}
+                        alt={file}
+                        // className="w-full h-full object-contain filter brightness-90 grayscale hover:grayscale-0 hover:brightness-110 transition-all duration-700 transform group-hover:scale-110"
+                        className="w-full h-full object-contain filter brightness-90 hover:grayscale-0 hover:brightness-110 transition-all duration-700 transform group-hover:scale-110"
+                      />
+                      
+                      {/* Overlay con gradiente */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+                      
+                      {/* Marco brillante al hacer hover */}
+                      <div className="absolute inset-0 border-2 border-transparent rounded-xl group-hover:border-red-500/50 group-hover:shadow-[0_0_20px_5px_rgba(190,23,31,0.5)] transition-all duration-700"></div>
+                    </div>
+                    
+                    {/* Efecto de sombra 3D */}
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-4 w-4/5 h-6 bg-black/50 blur-10 opacity-0 group-hover:opacity-50 transition-opacity duration-700 rounded-full"></div>
+                    
+                    {/* Efecto de partículas al hacer hover */}
+                    <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      {[...Array(15)].map((_, j) => (
+                        <div 
+                          key={j}
+                          className="absolute rounded-full bg-red-500"
+                          style={{
+                            top: `${Math.random() * 100}%`,
+                            left: `${Math.random() * 100}%`,
+                            width: `${Math.random() * 10 + 2}px`,
+                            height: `${Math.random() * 10 + 2}px`,
+                            animation: `float${Math.floor(Math.random() * 3) + 1} ${Math.random() * 5 + 5}s infinite linear`,
+                            opacity: Math.random() * 0.5 + 0.2
+                          }}
+                        ></div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -249,40 +311,42 @@ export default function Servicios() {
             <button
               onClick={() => scroll('right')}
               disabled={scrollPosition >= maxScroll}
-              className={`absolute right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-sm rounded-full p-4 z-20 transition-all duration-300 ${
+              className={`absolute right-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-md rounded-full p-4 z-20 transition-all duration-300 ${
                 scrollPosition >= maxScroll 
                   ? 'opacity-30 cursor-not-allowed' 
                   : 'hover:from-red-600 hover:to-red-700 hover:scale-110 shadow-lg hover:shadow-red-500/30'
               }`}
             >
-              <ChevronRight className="w-6 h-6 text-white" />
+              <ChevronRight className="w-8 h-8 text-white" />
             </button>
           </div>
           
-          {/* Indicadores mejorados */}
-          <div className="flex justify-center mt-8 space-x-3">
-            {Array.from({ length: 6 }).map((_, i) => (
+          {/* Indicadores premium */}
+          <div className="flex justify-center mt-12 space-x-3">
+            {Array.from({ length: providers.length }).map((_, i) => (
               <div 
                 key={i} 
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  scrollPosition >= maxScroll * (i/6) && scrollPosition < maxScroll * ((i+1)/6)
+                className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                  i === currentSlide
                     ? 'bg-gradient-to-r from-red-500 to-red-600 w-8 shadow-lg shadow-red-500/30'
                     : 'bg-gray-600 w-2 hover:bg-gray-500'
                 }`}
+                onClick={() => {
+                  const container = carouselRef.current;
+                  if (container) {
+                    const scrollPos = (container.scrollWidth / providers.length) * i;
+                    container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                    setScrollPosition(scrollPos);
+                    setCurrentSlide(i);
+                  }
+                }}
               ></div>
             ))}
-          </div>
-          
-          {/* Texto de control de auto-play */}
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-500">
-              {isAutoPlaying ? 'Reproducción automática activada' : 'Pausa el mouse para reanudar'}
-            </p>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -291,13 +355,33 @@ export default function Servicios() {
           display: none;
         }
         
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+        @keyframes float1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(5px, -5px) rotate(5deg); }
+          50% { transform: translate(10px, 5px) rotate(-5deg); }
+          75% { transform: translate(-5px, 10px) rotate(3deg); }
         }
         
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
+        @keyframes float2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-8px, 5px) rotate(-3deg); }
+          50% { transform: translate(5px, -8px) rotate(2deg); }
+          75% { transform: translate(-10px, -5px) rotate(-2deg); }
+        }
+        
+        @keyframes float3 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(7px, 10px) rotate(1deg); }
+          50% { transform: translate(-7px, -10px) rotate(-1deg); }
+          75% { transform: translate(10px, -7px) rotate(4deg); }
+        }
+        
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        
+        .transform-style-3d {
+          transform-style: preserve-3d;
         }
       `}</style>
     </section>
