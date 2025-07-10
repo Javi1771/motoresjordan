@@ -84,10 +84,7 @@ export default function Home() {
   };
 
   const handleEmailContact = () => {
-    window.open(
-      "mailto:contacto@motoresjordanmx.com?subject=Solicitud de Cotización&body=Hola, me interesa solicitar una cotización para equipos de bombeo. Por favor contáctenme.",
-      "_blank"
-    );
+    scrollToSection(contactRef);
   };
 
   const scrollToSection = (ref) => {
@@ -447,7 +444,7 @@ export default function Home() {
               Contáctanos por WhatsApp
             </button>
             <button
-              onClick={handleEmailContact}
+              onClick={() => scrollToSection(contactRef)}
               className="
                 flex items-center justify-center gap-2 flex-1 
                 bg-gray-800 text-white
