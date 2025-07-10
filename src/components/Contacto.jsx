@@ -33,14 +33,26 @@ export default function Contacto() {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.name.trim()) errors.name = "El nombre es requerido";
+
+    if (!formData.name.trim()) {
+      errors.name = "El nombre es requerido";
+    }
+
     if (!formData.email.trim()) {
       errors.email = "El email es requerido";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = "El email no es válido";
     }
-    if (!formData.phone.trim()) errors.phone = "El teléfono es requerido";
-    if (!formData.message.trim()) errors.message = "El mensaje es requerido";
+
+    if (!formData.phone.trim()) {
+      errors.phone = "El teléfono es requerido";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      errors.phone = "El teléfono debe tener exactamente 10 dígitos";
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "El mensaje es requerido";
+    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
