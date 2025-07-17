@@ -1,6 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, Users, Droplet, Zap, CheckCircle, Award, Leaf, } from "lucide-react";
+import {
+  Menu,
+  X,
+  Users,
+  Droplet,
+  Zap,
+  CheckCircle,
+  Award,
+  Leaf,
+} from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import Particles from "../components/Particles";
@@ -95,14 +104,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden box-border w-screen">
       {/* Fondo de partículas */}
       <Particles />
 
       {/* Luz ambiental */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-[#BE171F] rounded-full blur-[150px] opacity-10 animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/4 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-[#F43F48] rounded-full blur-[100px] opacity-10 animate-pulse" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#BE171F] rounded-full blur-[150px] opacity-10 animate-pulse" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-[#F43F48] rounded-full blur-[100px] opacity-10 animate-pulse" />
       </div>
 
       {/* Botón WhatsApp */}
@@ -116,67 +125,70 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Navegación */}
+      {/* Navegación mejorada */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrollY > 50
-            ? "bg-[#0a0a0a]/95 backdrop-blur-md shadow-xl py-2"
-            : "bg-transparent py-3 sm:py-4"
+            ? "bg-black/70 backdrop-blur-2xl shadow-2xl py-3"
+            : "bg-transparent py-4"
         }`}
       >
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-sm sm:text-base">
-                  MJ
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
-                Motores Jordan
-              </span>
+        <div className="max-w-screen-xl mx-auto px-6 lg:px-8 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-md hover:shadow-[#BE171F]/50 transition-shadow">
+              <span className="text-white font-extrabold uppercase">MJ</span>
             </div>
+            <h1 className="text-xl lg:text-2xl font-extrabold bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
+              Motores Jordan
+            </h1>
+          </div>
 
-            {/* Links escritorio */}
-            <div className="hidden md:flex items-center space-x-6">
-              {[
-                { label: "Servicios", ref: servicesRef, id: "services" },
-                { label: "Nosotros", ref: aboutRef, id: "about" },
-                { label: "Contacto", ref: contactRef, id: "contact" },
-              ].map(({ label, ref, id }) => (
-                <button
-                  key={id}
-                  onClick={() => scrollToSection(ref)}
-                  className={`text-sm lg:text-base hover:text-[#BE171F] transition-colors ${
-                    activeSection === id ? "text-[#BE171F] font-bold" : ""
+          {/* Enlaces de escritorio */}
+          <div className="hidden lg:flex items-center space-x-8 relative">
+            {[
+              { label: "Servicios", ref: servicesRef, id: "services" },
+              { label: "Nosotros", ref: aboutRef, id: "about" },
+              { label: "Contacto", ref: contactRef, id: "contact" },
+            ].map(({ label, ref, id }) => (
+              <button
+                key={id}
+                onClick={() => scrollToSection(ref)}
+                className="relative pb-1 text-white hover:text-[#BE171F] transition-colors"
+              >
+                <span
+                  className={`font-medium ${
+                    activeSection === id ? "text-[#BE171F]" : ""
                   }`}
                 >
                   {label}
-                </button>
-              ))}
-              <button
-                onClick={handleWhatsApp}
-                className="bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-4 py-1.5 sm:px-6 sm:py-2 rounded-full hover:shadow-lg transition-all text-sm sm:text-base"
-              >
-                Cotizar
+                </span>
+                {activeSection === id && (
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full" />
+                )}
               </button>
-            </div>
-
-            {/* Toggle móvil */}
+            ))}
             <button
-              className="md:hidden text-white"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={handleWhatsApp}
+              className="ml-6 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-2 rounded-full text-white font-semibold shadow-lg hover:scale-105 transform transition"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              Cotizar
             </button>
           </div>
+
+          {/* Toggle móvil */}
+          <button
+            className="lg:hidden text-white hover:text-[#BE171F] transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        {/* Menu móvil */}
+        {/* Menú móvil */}
         {isMenuOpen && (
-          <div className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-md py-4 fixed top-16 inset-x-0">
-            <div className="max-w-screen-xl mx-auto px-6 space-y-2">
+          <div className="lg:hidden bg-black/80 backdrop-blur-lg py-6">
+            <div className="max-w-screen-xl mx-auto px-6 space-y-4">
               {[
                 { label: "Servicios", ref: servicesRef },
                 { label: "Nosotros", ref: aboutRef },
@@ -188,14 +200,14 @@ export default function Home() {
                     scrollToSection(ref);
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full py-3 text-left hover:text-[#BE171F] border-b border-[#2e2e2e] transition-colors"
+                  className="w-full text-left text-white py-3 px-4 rounded hover:bg-[#BE171F]/20 transition"
                 >
                   {label}
                 </button>
               ))}
               <button
                 onClick={handleWhatsApp}
-                className="w-full mt-4 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-3 rounded-full hover:shadow-lg transition-all text-center"
+                className="w-full mt-4 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-3 rounded-full text-center text-white font-semibold hover:shadow-lg transition"
               >
                 <FaWhatsapp className="inline-block mr-2" />
                 Solicitar Cotización
@@ -205,58 +217,39 @@ export default function Home() {
         )}
       </nav>
 
-      {/* Hero */}
+      <div className="h-16 sm:h-20 lg:h-24"></div>
+
+      {/* Hero - fondo completo bajo el nav */}
       <section
         ref={heroRef}
-        className="relative flex flex-col items-center justify-center min-h-[80vh] md:min-h-screen pt-20 pb-12 md:py-20 overflow-hidden"
+        className="relative flex flex-col items-center justify-center min-h-[80vh] lg:min-h-screen pt-28 pb-12 lg:py-20 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-[#2a0a0e] opacity-90" />
 
-        {/* Tarjetas laterales (desktop) */}
+        {/* Tarjetas laterales */}
         {showSideCards && (
           <>
-            {/* Izquierda */}
-            <div
-              className="hidden lg:block absolute left-[3%] top-1/2 transform -translate-y-1/2
-                 w-[26vw] min-w-[280px] max-w-[380px] z-10
-                 transition-transform hover:translate-x-4"
-            >
-              <div
-                className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6
-                   border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden
-                   transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
-              >
-                <div
-                  className="absolute -top-20 -right-20 w-60 h-60 bg-[#BE171F]
-                        rounded-full opacity-10 blur-3xl transition-opacity"
-                />
+            <div className="hidden xl:block absolute inset-y-0 left-0 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
+              <div className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 transition-all duration-300 hover:scale-[1.01] border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] flex-shrink-0">
+                <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl" />
                 <img
                   src="/triangulo.png"
                   alt="Ahorro de agua y energía"
-                  className="w-40 lg:w-48 h-40 lg:h-48 object-contain mx-auto mb-4"
+                  className="w-32 2xl:w-36 h-32 2xl:h-36 object-contain mx-auto mb-3"
                 />
-                <h3
-                  className="text-lg lg:text-xl font-bold mb-2 text-center
-                     bg-clip-text text-transparent
-                     bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
-                >
+                <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
                   Potenciamos el ahorro de agua y energía
                 </h3>
-                <p className="text-xs lg:text-sm text-[#8E8F91] text-center mb-4">
+                <p className="text-xs 2xl:text-sm text-[#8E8F91] text-center mb-3">
                   Tecnología avanzada que optimiza recursos y maximiza
                   eficiencia
                 </p>
-
-                {/* Features */}
-                <div className="space-y-3">
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Droplet className="w-5 h-5 text-white" />
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Droplet className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Reducción de consumo
                       </p>
@@ -265,14 +258,11 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-white" />
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Eficiencia energética
                       </p>
@@ -281,14 +271,11 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Leaf className="w-5 h-5 text-white" />
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Leaf className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Sostenibilidad
                       </p>
@@ -300,48 +287,26 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Derecha */}
-            <div
-              className="hidden lg:block absolute right-[3%] top-1/2 transform -translate-y-1/2
-                 w-[26vw] min-w-[280px] max-w-[380px] z-10
-                 transition-transform hover:-translate-x-4"
-            >
-              <div
-                className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-6
-                   border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden
-                   transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
-              >
-                <div
-                  className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F]
-                        rounded-full opacity-10 blur-3xl transition-opacity"
-                />
+            <div className="hidden xl:block absolute inset-y-0 right-0 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
+              <div className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 transition-all duration-300 hover:scale-[1.01] border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] flex-shrink-0">
+                <div className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl" />
                 <img
                   src="/Engranajes.png"
                   alt="Excelencia en procesos"
-                  className="w-40 lg:w-48 h-40 lg:h-48 object-contain mx-auto mb-4"
+                  className="w-32 2xl:w-36 h-32 2xl:h-36 object-contain mx-auto mb-3"
                 />
-                <h3
-                  className="text-lg lg:text-xl font-bold mb-2 text-center
-                     bg-clip-text text-transparent
-                     bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
-                >
+                <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
                   Excelencia en procesos
                 </h3>
-                <p className="text-xs lg:text-sm text-[#8E8F91] text-center mb-4">
+                <p className="text-xs 2xl:text-sm text-[#8E8F91] text-center mb-3">
                   Sistemas robustos y soluciones confiables
                 </p>
-
-                {/* Features */}
-                <div className="space-y-3">
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Award className="w-5 h-5 text-white" />
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Award className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Calidad garantizada
                       </p>
@@ -350,14 +315,11 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-white" />
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Tecnología avanzada
                       </p>
@@ -366,14 +328,11 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="flex items-start gap-4 p-3 border-2 border-[#2e2e2e] rounded-lg
-                       transition-colors duration-300 group-hover:border-[#FF073A]"
-                  >
-                    <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Users className="w-5 h-5 text-white" />
+                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
+                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                      <Users className="w-4 h-4 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-white">
                         Soporte experto
                       </p>
@@ -389,35 +348,22 @@ export default function Home() {
         )}
 
         {/* Contenido central */}
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl w-full">
-          {/* Logo Card con logo +40 % */}
-          <div
-            className="mx-auto mb-6 sm:mb-10 max-w-2xl
-             bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a]
-             rounded-2xl p-5 shadow-xl border border-[#2e2e2e]
-             transition-all hover:shadow-2xl hover:scale-105"
-          >
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto w-full min-w-0">
+          <div className="mx-auto mb-5 sm:mb-7 max-w-md w-full bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 shadow-xl border border-[#2e2e2e] transition-all hover:scale-[1.02]">
             <img
               src="/logo.jpg"
               alt="Logo Jordan"
-              className="
-                mx-auto mb-4
-                w-[29.4rem]     /* ~21rem ×1.4 */
-                sm:w-[33.6rem]  /* ~24rem ×1.4 */
-                md:w-[36.4rem]  /* ~26rem ×1.4 */
-                h-auto object-contain
-              "
+              className="w-full h-auto object-contain max-h-32 sm:max-h-40 lg:max-h-48"
             />
           </div>
-
-          <h1 className="text-[clamp(1.75rem,6vw,3rem)] font-bold mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
             Moto-Bombas y Reductores
             <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
+            <span className="bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
               Jordan S.A. de C.V.
             </span>
           </h1>
-          <p className="text-[clamp(.875rem,2.5vw,1.125rem)] text-[#8E8F91] mb-8">
+          <p className="text-sm sm:text-base lg:text-lg text-[#8E8F91] mb-5 sm:mb-6 max-w-2xl mx-auto">
             Soluciones profesionales en sistemas de bombeo y transmisión de
             potencia con{" "}
             <span className="text-[#BE171F] font-semibold">
@@ -426,67 +372,34 @@ export default function Home() {
           </p>
 
           {/* Botones de acción */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 max-w-2xl mx-auto">
             <button
               onClick={handleWhatsApp}
-              className="
-                flex items-center justify-center gap-2 flex-1 
-                bg-gradient-to-r from-[#BE171F] to-[#F43F48]
-                py-3 rounded-full font-semibold
-                border-2 border-transparent
-                transform hover:scale-105
-                hover:border-[#FF073A]
-                hover:shadow-[0_0_8px_#FF073A]
-                transition duration-300
-              "
+              className="flex items-center justify-center gap-2 flex-1 bg-gradient-to-r from-[#BE171F] to-[#F43F48] py-3 px-6 rounded-full font-semibold text-sm lg:text-base border-2 border-transparent transform hover:scale-[1.03] hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] transition duration-300 min-h-[48px]"
             >
-              <FaWhatsapp className="w-[1.6em] h-[1.6em]" />
+              <FaWhatsapp className="w-5 h-5" />
               Contáctanos por WhatsApp
             </button>
             <button
               onClick={() => scrollToSection(contactRef)}
-              className="
-                flex items-center justify-center gap-2 flex-1 
-                bg-gray-800 text-white
-                py-3 rounded-full font-semibold
-                border-2 border-transparent
-                transform hover:scale-105
-                hover:border-[#FF073A]
-                hover:shadow-[0_0_8px_#FF073A]
-                transition duration-300
-              "
+              className="flex items-center justify-center gap-2 flex-1 bg-gray-800 text-white py-3 px-6 rounded-full font-semibold text-sm lg:text-base border-2 border-transparent transform hover:scale-[1.03] hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] transition duration-300 min-h-[48px]"
             >
-              <MdEmail className="w-[1.6em] h-[1.6em]" />
+              <MdEmail className="w-5 h-5" />
               Cotizar por Correo
             </button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8 max-w-screen-xl mx-auto w-full">
             {stats.map((s, i) => (
               <div
                 key={i}
-                className="
-                  group
-                  flex flex-col items-center
-                  p-6 rounded-2xl
-                  bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60
-                  backdrop-blur-lg
-                  border-2 border-[#2e2e2e]/70
-                  shadow-xl
-                  transition-all duration-300
-                  hover:border-[#FF073A]
-                  hover:shadow-[0_0_8px_#FF073A]
-                "
+                className="group flex flex-col items-center p-3 sm:p-4 lg:p-5 bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60 backdrop-blur-lg border-2 border-[#2e2e2e]/70 shadow-xl transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] min-h-[80px] sm:min-h-[90px] min-w-0"
               >
-                <div
-                  className="text-3xl font-extrabold mb-2
-                      bg-clip-text text-transparent
-                      bg-gradient-to-r from-[#BE171F] to-[#F43F48]"
-                >
+                <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-1 sm:mb-2 bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
                   {s.number}
                 </div>
-                <div className="text-xs uppercase tracking-wider text-[#8E8F91]">
+                <div className="text-xs sm:text-sm uppercase tracking-wider text-[#8E8F91] text-center">
                   {s.label}
                 </div>
               </div>
@@ -494,61 +407,32 @@ export default function Home() {
           </div>
 
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-w-screen-xl mx-auto w-full">
             {features.map((f, i) => (
               <div
                 key={i}
-                className="
-                  group
-                  flex flex-col items-center text-center
-                  p-8 rounded-2xl
-                  bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60
-                  backdrop-blur-lg
-                  border-2 border-[#2e2e2e]/70
-                  shadow-xl
-                  transition-all duration-300
-                  hover:border-[#FF073A]
-                  hover:shadow-[0_0_8px_#FF073A]
-                "
+                className="group flex flex-col items-center text-center p-4 sm:p-5 lg:p-6 bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60 backdrop-blur-lg border-2 border-[#2e2e2e]/70 shadow-xl transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] min-h-[140px] sm:min-h-[160px] min-w-0"
               >
-                {/* Icono dentro de círculo */}
-                <div
-                  className="
-                    w-12 h-12 mb-4
-                    flex items-center justify-center
-                    rounded-full
-                    bg-[#FF073A]/80
-                    transition-transform duration-300
-                    group-hover:scale-110
-                  "
-                >
+                <div className="w-12 h-12 mb-3 sm:mb-4 flex items-center justify-center rounded-full bg-[#FF073A]/80 transition-transform duration-300 group-hover:scale-110 flex-shrink-0">
                   {React.cloneElement(f.icon, {
                     className: "w-6 h-6 text-white",
                   })}
                 </div>
-
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-2 sm:mb-3">
                   {f.title}
                 </h3>
-                <p className="text-sm text-[#8E8F91]">{f.description}</p>
-
-                {/* Línea decorativa */}
-                <span
-                  className="
-                    mt-6 w-12 h-1 rounded-full
-                    bg-gradient-to-r from-[#BE171F] to-[#F43F48]
-                    opacity-60 group-hover:opacity-100
-                    transition-opacity duration-300
-                  "
-                ></span>
+                <p className="text-xs sm:text-sm lg:text-base text-[#8E8F91] leading-relaxed">
+                  {f.description}
+                </p>
+                <span className="mt-3 sm:mt-4 w-12 h-1 rounded-full bg-gradient-to-r from-[#BE171F] to-[#F43F48] opacity-60 group-hover:opacity-100 transition-opacity duration-300"></span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Mobile Cards – apiladas verticalmente */}
-      <div className="lg:hidden relative z-10 w-full max-w-2xl mx-auto mt-10 px-4 flex flex-col gap-6 pb-12">
+      {/* Mobile Cards */}
+      <div className="xl:hidden relative z-10 w-full max-w-2xl mx-auto mt-6 px-4 flex flex-col gap-4 pb-10">
         {[
           {
             img: "/triangulo.png",
@@ -575,7 +459,7 @@ export default function Home() {
           {
             img: "/Engranajes.png",
             title: "Excelencia en procesos",
-            text: "Sistemas robustos y soluciones confiables",
+            text: "Sistemas robustos y soluciones fiables",
             features: [
               {
                 Icon: Award,
@@ -597,45 +481,30 @@ export default function Home() {
         ].map((c, i) => (
           <div
             key={i}
-            className="
-              group
-              w-full
-              bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a]
-              rounded-2xl p-5 shadow-xl
-              border-2 border-[#2e2e2e]
-              transition-all duration-300
-              hover:border-[#FF073A]
-              hover:shadow-[0_0_8px_#FF073A]
-            "
+            className="group w-full bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 sm:p-5 shadow-xl border-2 border-[#2e2e2e] transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
           >
             <img
               src={c.img}
               alt=""
-              className="mx-auto mb-4 w-32 h-auto object-contain"
+              className="mx-auto mb-3 w-28 sm:w-32 h-auto object-contain"
             />
-            <h3 className="text-lg font-bold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#BE171F] to-[#F43F48]">
+            <h3 className="text-base sm:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
               {c.title}
             </h3>
-            <p className="text-sm text-[#8E8F91] text-center">{c.text}</p>
-
-            {/* Features */}
-            <div className="space-y-3 mt-4">
+            <p className="text-xs sm:text-sm text-[#8E8F91] text-center mb-4">
+              {c.text}
+            </p>
+            <div className="space-y-2">
               {c.features.map((f, j) => (
                 <div
                   key={j}
-                  className="
-                    flex items-start gap-4 p-3
-                    border-2 border-[#2e2e2e]
-                    rounded-lg
-                    transition-colors duration-300
-                    group-hover:border-[#FF073A]
-                  "
+                  className="flex items-start gap-3 p-2.5 sm:p-3 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors"
                 >
-                  <div className="w-8 h-8 bg-[#FF073A] rounded-full flex items-center justify-center">
-                    <f.Icon className="w-5 h-5 text-white" />
+                  <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
+                    <f.Icon className="w-4 h-4 text-white" />
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-semibold text-white">
                       {f.title}
                     </p>
                     <p className="text-xs text-[#8E8F91]">{f.text}</p>
@@ -648,27 +517,27 @@ export default function Home() {
       </div>
 
       {/* Secciones auxiliares */}
-      <div ref={servicesRef}>
+      <div ref={servicesRef} className="max-w-screen-xl mx-auto px-4">
         <Servicios />
       </div>
-      <div ref={aboutRef}>
+      <div ref={aboutRef} className="max-w-screen-xl mx-auto px-4">
         <Nosotros />
       </div>
-      <div ref={contactRef}>
+      <div ref={contactRef} className="max-w-screen-xl mx-auto px-4">
         <Contacto />
       </div>
 
       {/* Footer */}
-      <footer className="bg-black border-t border-[#4E4F50] py-8 sm:py-12">
+      <footer className="bg-black border-t border-[#4E4F50] py-6 sm:py-8">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 text-center text-[#8E8F91]">
-          <h4 className="text-xl font-bold mb-2">
+          <h4 className="text-lg sm:text-xl font-bold mb-1.5">
             Moto-Bombas y Reductores Jordan
           </h4>
-          <p className="mb-4">
+          <p className="mb-3 text-sm">
             Potenciando el bombeo, control y potencia de tus proyectos desde
             1999.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
+          <div className="flex flex-wrap justify-center gap-3 mb-4 text-xs sm:text-sm">
             <button onClick={() => scrollToSection(servicesRef)}>
               Servicios
             </button>
