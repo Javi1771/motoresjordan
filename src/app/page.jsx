@@ -125,70 +125,60 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Navegación mejorada */}
+      {/* Navegación */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrollY > 50
-            ? "bg-black/70 backdrop-blur-2xl shadow-2xl py-3"
-            : "bg-transparent py-4"
+            ? "bg-[#0a0a0a]/95 backdrop-blur-md shadow-xl py-2"
+            : "bg-transparent py-3 sm:py-4"
         }`}
       >
-        <div className="max-w-screen-xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-md hover:shadow-[#BE171F]/50 transition-shadow">
-              <span className="text-white font-extrabold uppercase">MJ</span>
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-sm sm:text-base">
+                  MJ
+                </span>
+              </div>
+              <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
+                Motores Jordan
+              </span>
             </div>
-            <h1 className="text-xl lg:text-2xl font-extrabold bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-              Motores Jordan
-            </h1>
-          </div>
-
-          {/* Enlaces de escritorio */}
-          <div className="hidden lg:flex items-center space-x-8 relative">
-            {[
-              { label: "Servicios", ref: servicesRef, id: "services" },
-              { label: "Nosotros", ref: aboutRef, id: "about" },
-              { label: "Contacto", ref: contactRef, id: "contact" },
-            ].map(({ label, ref, id }) => (
-              <button
-                key={id}
-                onClick={() => scrollToSection(ref)}
-                className="relative pb-1 text-white hover:text-[#BE171F] transition-colors"
-              >
-                <span
-                  className={`font-medium ${
-                    activeSection === id ? "text-[#BE171F]" : ""
+            <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
+              {[
+                { label: "Servicios", ref: servicesRef, id: "services" },
+                { label: "Nosotros", ref: aboutRef, id: "about" },
+                { label: "Contacto", ref: contactRef, id: "contact" },
+              ].map(({ label, ref, id }) => (
+                <button
+                  key={id}
+                  onClick={() => scrollToSection(ref)}
+                  className={`text-sm xl:text-base hover:text-[#BE171F] transition-colors ${
+                    activeSection === id ? "text-[#BE171F] font-bold" : ""
                   }`}
                 >
                   {label}
-                </span>
-                {activeSection === id && (
-                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full" />
-                )}
+                </button>
+              ))}
+              <button
+                onClick={handleWhatsApp}
+                className="bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:shadow-lg transition-all text-sm sm:text-base"
+              >
+                Cotizar
               </button>
-            ))}
+            </div>
             <button
-              onClick={handleWhatsApp}
-              className="ml-6 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-2 rounded-full text-white font-semibold shadow-lg hover:scale-105 transform transition"
+              className="lg:hidden text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              Cotizar
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-
-          {/* Toggle móvil */}
-          <button
-            className="lg:hidden text-white hover:text-[#BE171F] transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
-
-        {/* Menú móvil */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-black/80 backdrop-blur-lg py-6">
-            <div className="max-w-screen-xl mx-auto px-6 space-y-4">
+          <div className="lg:hidden bg-[#0a0a0a]/95 backdrop-blur-md py-4 fixed top-16 inset-x-0">
+            <div className="max-w-screen-xl mx-auto px-6 space-y-2">
               {[
                 { label: "Servicios", ref: servicesRef },
                 { label: "Nosotros", ref: aboutRef },
@@ -200,14 +190,14 @@ export default function Home() {
                     scrollToSection(ref);
                     setIsMenuOpen(false);
                   }}
-                  className="w-full text-left text-white py-3 px-4 rounded hover:bg-[#BE171F]/20 transition"
+                  className="block w-full py-3 text-left hover:text-[#BE171F] border-b border-[#2e2e2e] transition-colors"
                 >
                   {label}
                 </button>
               ))}
               <button
                 onClick={handleWhatsApp}
-                className="w-full mt-4 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-3 rounded-full text-center text-white font-semibold hover:shadow-lg transition"
+                className="w-full mt-4 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-3 rounded-full hover:shadow-lg transition-all text-center"
               >
                 <FaWhatsapp className="inline-block mr-2" />
                 Solicitar Cotización
@@ -216,7 +206,6 @@ export default function Home() {
           </div>
         )}
       </nav>
-
       <div className="h-16 sm:h-20 lg:h-24"></div>
 
       {/* Hero - fondo completo bajo el nav */}
