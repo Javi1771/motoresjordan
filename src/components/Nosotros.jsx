@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Zap,
   Shield,
@@ -11,8 +11,9 @@ import {
   Heart,
   TrendingUp,
   CheckCircle,
-  Factory
-} from 'lucide-react';
+  Factory,
+} from "lucide-react";
+import { PiGearBold } from "react-icons/pi";
 
 export default function Nosotros() {
   const [activeCard, setActiveCard] = useState(null);
@@ -24,15 +25,15 @@ export default function Nosotros() {
       title: "Trabajo Cooperativo",
       content:
         "Creemos que el trabajo cooperativo y el conocimiento compartido son las claves del éxito.",
-      color: "from-[#BE171F] to-[#F43F48]"
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 2,
       icon: Factory,
       title: "Especialistas Industriales",
       content:
-        "Somos especialistas en motores eléctricos y reductores para sectores farmacéutico, agrícola, comercial, metalúrgico y plantas tratadoras de agua.",
-      color: "from-[#BE171F] to-[#F43F48]"
+        "Somos especialistas en motores eléctricos y reductores para diferentes sectores.",
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 3,
@@ -40,23 +41,22 @@ export default function Nosotros() {
       title: "Calidad Premium",
       content:
         "Trabajamos con altos estándares de calidad, refacciones genuinas y marcas líderes para ofrecer el mejor servicio a precios competitivos.",
-      color: "from-[#BE171F] to-[#F43F48]"
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 4,
       icon: Target,
       title: "Sectores Diversos",
       content:
-        "Nuestros productos van dirigidos a cualquier sector: farmacéutico, metalúrgico, plantas de agua, entre otros.",
-      color: "from-[#BE171F] to-[#F43F48]"
+        "Nuestros productos van dirigidos a cualquier sector: farmacéutico, comercial, reventa y residencial.",
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 5,
       icon: Clock,
       title: "Servicio Rápido",
-      content:
-        "Amplio stock y personal capacitado para entregas express y mantenimiento in situ donde lo necesites.",
-      color: "from-[#BE171F] to-[#F43F48]"
+      content: "Para mantenimiento y entregas express.",
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 6,
@@ -64,7 +64,7 @@ export default function Nosotros() {
       title: "Compromiso Total",
       content:
         "Nuestro objetivo es ser recomendados por la excelencia de nuestro mantenimiento y atención al cliente.",
-      color: "from-[#BE171F] to-[#F43F48]"
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 7,
@@ -72,7 +72,7 @@ export default function Nosotros() {
       title: "Productos Premium",
       content:
         "Ofrecemos motores AC/DC, reductores, variadores, compresores, filtros, hidroneumáticos y sistemas contra incendio.",
-      color: "from-[#BE171F] to-[#F43F48]"
+      color: "from-[#BE171F] to-[#F43F48]",
     },
     {
       id: 8,
@@ -80,8 +80,16 @@ export default function Nosotros() {
       title: "Satisfacción Garantizada",
       content:
         "Atención personalizada y cartera de clientes satisfechos que respaldan nuestra calidad-precio-atención.",
-      color: "from-[#BE171F] to-[#F43F48]"
-    }
+      color: "from-[#BE171F] to-[#F43F48]",
+    },
+    {
+      id: 9,
+      icon: PiGearBold,
+      title: "Reductores IEC y NEMA",
+      content:
+        "Amplia variedad de reductores bajo norma IEC y NEMA, ideales para aplicaciones industriales exigentes.",
+      color: "from-[#BE171F] to-[#F43F48]",
+    },
   ];
 
   return (
@@ -108,8 +116,12 @@ export default function Nosotros() {
             ¿Por qué elegir Jordan?
           </h2>
           <p className="max-w-3xl mx-auto text-2xl text-[#D0D0D1] leading-relaxed">
-            Con más de <span className="text-[#BE171F] font-bold">15 años de experiencia</span>, somos
-            líderes en soluciones de bombeo y control industrial en San Juan del Río, Querétaro.
+            Con más de{" "}
+            <span className="text-[#BE171F] font-bold">
+              15 años de experiencia
+            </span>
+            , somos líderes en soluciones de bombeo industrial, transmisión de
+            potencia y control industrial en San Juan del Río, Querétaro.
           </p>
         </div>
 
@@ -124,7 +136,7 @@ export default function Nosotros() {
                 onMouseEnter={() => setActiveCard(card.id)}
                 onMouseLeave={() => setActiveCard(null)}
                 className={`relative group cursor-pointer transform transition-all duration-500 ${
-                  isActive ? 'scale-105 z-20' : 'z-10'
+                  isActive ? "scale-105 z-20" : "z-10"
                 }`}
               >
                 <div
@@ -139,7 +151,7 @@ export default function Nosotros() {
                     </div>
                     <h3
                       className={`ml-4 text-xl font-bold text-white transition-colors duration-300 ${
-                        isActive ? 'text-[#BE171F]' : ''
+                        isActive ? "text-[#BE171F]" : ""
                       }`}
                     >
                       {card.title}
@@ -160,10 +172,26 @@ export default function Nosotros() {
         {/* Características principales */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {[
-            { icon: Zap, title: "Tecnología Avanzada", text: "Equipos de última generación para máximo rendimiento" },
-            { icon: Shield, title: "Garantía Total", text: "Respaldamos la calidad de nuestros productos y servicios" },
-            { icon: Wrench, title: "Servicio Integral", text: "Desde la consultoría hasta el mantenimiento" },
-            { icon: Star, title: "Experiencia Comprobada", text: "500+ proyectos exitosos nos respaldan" }
+            {
+              icon: Zap,
+              title: "Tecnología Avanzada",
+              text: "Equipos de última generación para máximo rendimiento",
+            },
+            {
+              icon: Shield,
+              title: "Garantía Total",
+              text: "Respaldamos la calidad de nuestros productos y servicios",
+            },
+            {
+              icon: Wrench,
+              title: "Servicio Integral",
+              text: "Desde la consultoría hasta el mantenimiento",
+            },
+            {
+              icon: Star,
+              title: "Experiencia Comprobada",
+              text: "Ventas diarias y coadyuvando proyectos exitosos nos respaldan",
+            },
           ].map((item, idx) => {
             const Icon = item.icon;
             return (
@@ -200,9 +228,9 @@ export default function Nosotros() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             {[
+              { label: "2" , desc: "Sucursales" },
               { label: "15+ Años", desc: "Experiencia" },
-              { label: "500+", desc: "Proyectos" },
-              { label: "100%", desc: "Satisfacción" }
+              { label: "100%", desc: "Satisfacción" },
             ].map((stat, i) => (
               <div key={i} className="group">
                 <div className="text-4xl font-bold text-[#F43F48] mb-2 group-hover:scale-110 transition-transform duration-300">

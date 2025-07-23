@@ -16,6 +16,7 @@ import Particles from "../components/Particles";
 import Servicios from "../components/Servicios";
 import Contacto from "../components/Contacto";
 import Nosotros from "../components/Nosotros";
+import { number } from "framer-motion";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,9 +63,9 @@ export default function Home() {
 
   const stats = [
     { number: "15+", label: "Años de experiencia" },
-    { number: "500+", label: "Proyectos completados" },
+    { number: "100+", label: "Amplio stock de productos" },
     { number: "100%", label: "Satisfacción garantizada" },
-    { number: "24/7", label: "Soporte técnico" },
+    { number: "#1", label: "Soporte técnico especializado" },
   ];
 
   const features = [
@@ -76,7 +77,7 @@ export default function Home() {
     {
       icon: <Zap className="text-[#BE171F]" size={28} />,
       title: "Ahorro energético",
-      description: "Reducción de consumo hasta en un 35%",
+      description: "Filtros para la reutilización del vital líquido",
     },
     {
       icon: <CheckCircle className="text-[#BE171F]" size={28} />,
@@ -282,8 +283,9 @@ export default function Home() {
                 <img
                   src="/Engranajes.png"
                   alt="Excelencia en procesos"
-                  className="w-32 2xl:w-36 h-32 2xl:h-36 object-contain mx-auto mb-3"
+                  className="w-48 2xl:w-60 h-48 2xl:h-60 object-contain mx-auto mb-3"
                 />
+
                 <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
                   Excelencia en procesos
                 </h3>
@@ -326,7 +328,7 @@ export default function Home() {
                         Soporte experto
                       </p>
                       <p className="text-xs text-[#8E8F91]">
-                        Equipo técnico especializado
+                        Equipo técnico especializado y respaldo de fábrica
                       </p>
                     </div>
                   </div>
@@ -524,7 +526,7 @@ export default function Home() {
           </h4>
           <p className="mb-3 text-sm">
             Potenciando el bombeo, control y potencia de tus proyectos desde
-            1999.
+            2011.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-4 text-xs sm:text-sm">
             <button onClick={() => scrollToSection(servicesRef)}>

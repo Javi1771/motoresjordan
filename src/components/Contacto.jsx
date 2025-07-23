@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  Mail,
-  MapPin,
-  Clock,
   Send,
   Users,
+  Mail,
   Award,
   Shield,
   Headphones,
@@ -12,6 +10,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
+import Direccion from "./interface/Direccion";
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -197,13 +196,6 @@ ${formData.name}`;
     window.open(outlookUrl, "_blank");
   };
 
-  const stats = [
-    { icon: Users, value: "500+", label: "Clientes Satisfechos" },
-    { icon: Award, value: "15+", label: "Años de Experiencia" },
-    { icon: Shield, value: "100%", label: "Garantía de Calidad" },
-    { icon: Headphones, value: "24/7", label: "Soporte Técnico" },
-  ];
-
   return (
     <section
       id="contact"
@@ -288,115 +280,11 @@ ${formData.name}`;
               experiencia
             </p>
           </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mt-12 lg:mt-16 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className={`bg-gradient-to-br from-[#262626]/90 to-[#1a1a1a]/90 backdrop-blur-sm rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-[#4E4F50]/50 hover:border-[#BE171F]/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#BE171F]/10 ${
-                  isVisible
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-8 opacity-0"
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-[#BE171F] to-[#F43F48] rounded-lg lg:rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
-                </div>
-                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-xs sm:text-sm text-[#8E8F91] font-medium">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8 xl:gap-12 max-w-7xl mx-auto">
           {/* Contact Info */}
-          <div
-            className={`space-y-6 lg:space-y-8 transition-all duration-1000 delay-300 ${
-              isVisible
-                ? "translate-x-0 opacity-100"
-                : "-translate-x-8 opacity-0"
-            }`}
-          >
-            {/* Contact Details Card */}
-            <div className="bg-gradient-to-br from-[#262626]/90 to-[#1a1a1a]/90 backdrop-blur-sm rounded-xl lg:rounded-2xl p-6 lg:p-8 border border-[#4E4F50]/50 hover:border-[#BE171F]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#BE171F]/10">
-              <div className="flex items-center mb-6 lg:mb-8">
-                <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-[#BE171F] to-[#F43F48] rounded-lg lg:rounded-xl flex items-center justify-center mr-4">
-                  <MapPin className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-white">
-                  Información de Contacto
-                </h3>
-              </div>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-[#4E4F50]/50 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 lg:w-6 lg:h-6 text-[#BE171F]" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white mb-1">Dirección</h4>
-                    <p className="text-[#8E8F91] leading-relaxed">
-                      C. José María Morelos 126-C, Centro
-                      <br />
-                      76800 San Juan del Río, Qro.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-[#4E4F50]/50 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 lg:w-6 lg:h-6 text-[#BE171F]" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white mb-1">Email</h4>
-                    <p className="text-[#8E8F91] break-all sm:break-normal">
-                      contacto@motoresjordanmx.com
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Schedule Card */}
-            <div className="bg-gradient-to-br from-[#262626]/90 to-[#1a1a1a]/90 backdrop-blur-sm rounded-xl lg:rounded-2xl p-6 lg:p-8 border border-[#4E4F50]/50 hover:border-[#BE171F]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#BE171F]/10">
-              <div className="flex items-center mb-6 lg:mb-8">
-                <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-[#BE171F] to-[#F43F48] rounded-lg lg:rounded-xl flex items-center justify-center mr-4">
-                  <Clock className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-white">
-                  Horario de Atención
-                </h3>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-[#1a1a1a]/50 rounded-lg">
-                  <span className="text-[#8E8F91] font-medium">
-                    Lunes - Viernes
-                  </span>
-                  <span className="text-white font-semibold">
-                    8:15 AM - 5:30 PM
-                  </span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-[#1a1a1a]/50 rounded-lg">
-                  <span className="text-[#8E8F91] font-medium">Sábado</span>
-                  <span className="text-white font-semibold">
-                    8:15 AM - 1:30 PM
-                  </span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 px-4 bg-[#1a1a1a]/50 rounded-lg">
-                  <span className="text-[#8E8F91] font-medium">Domingo</span>
-                  <span className="text-[#BE171F] font-semibold">Cerrado</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Direccion />
 
           {/* Contact Form */}
           <div
