@@ -90,7 +90,7 @@ export default function Home() {
     const message = encodeURIComponent(
       "Hola, me interesa solicitar una cotización para equipos de bombeo. ¿Podrían ayudarme?"
     );
-    window.open(`https://wa.me/524423919520?text=${message}`, "_blank");
+    window.open(`https://wa.me/524273762379?text=${message}`, "_blank");
   };
 
   const handleEmailContact = () => {

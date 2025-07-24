@@ -84,7 +84,7 @@ ${formData.message}
 
 Gracias por su atención.`);
 
-      window.open(`https://wa.me/524423919520?text=${message}`, "_blank");
+      window.open(`https://wa.me/524273762379?text=${message}`, "_blank");
       setIsSubmitting(false);
     }, 1000);
   };
