@@ -16,7 +16,6 @@ import Particles from "../components/Particles";
 import Servicios from "../components/Servicios";
 import Contacto from "../components/Contacto";
 import Nosotros from "../components/Nosotros";
-import { number } from "framer-motion";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -508,13 +507,13 @@ export default function Home() {
       </div>
 
       {/* Secciones auxiliares */}
-      <div ref={servicesRef} className="max-w-screen-xl mx-auto px-4">
+      <div ref={servicesRef} className="mx-auto px-4">
         <Servicios />
       </div>
-      <div ref={aboutRef} className="max-w-screen-xl mx-auto px-4">
+      <div ref={aboutRef} className="mx-auto px-4">
         <Nosotros />
       </div>
-      <div ref={contactRef} className="max-w-screen-xl mx-auto px-4">
+      <div ref={contactRef} className="mx-auto px-4">
         <Contacto />
       </div>
 
