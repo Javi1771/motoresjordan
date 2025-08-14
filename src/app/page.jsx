@@ -276,13 +276,15 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="hidden xl:block absolute inset-y-0 right-0 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
+            <div className="hidden xl:block absolute inset-y-0 right-2 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
               <div className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 transition-all duration-300 hover:scale-[1.01] border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] flex-shrink-0">
                 <div className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl" />
                 <img
                   src="/Engranajes.png"
                   alt="Excelencia en procesos"
-                  className="w-48 2xl:w-60 h-48 2xl:h-60 object-contain mx-auto mb-3"
+                  //className="w-48 2xl:w-60 h-48 2xl:h-60 object-contain mx-auto mb-3"
+                  className="w-38 2xl:w-50 h-38 2xl:h-50 object-contain mx-auto mb-3"
+
                 />
 
                 <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
