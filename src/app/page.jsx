@@ -16,6 +16,7 @@ import Particles from "../components/Particles";
 import Servicios from "../components/Servicios";
 import Contacto from "../components/Contacto";
 import Nosotros from "../components/Nosotros";
+import { track } from '@vercel/analytics'; 
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,20 +46,43 @@ export default function Home() {
         { id: "contact", ref: contactRef },
       ];
 
+      let foundNewSection = false;
       for (const section of sections) {
         if (section.ref.current) {
           const rect = section.ref.current.getBoundingClientRect();
           if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section.id);
+            //* Solo actualizar si la sección cambió
+            if (section.id !== activeSection) {
+              setActiveSection(section.id);
+              
+              //* ENVIAR EVENTO A VERCEL ANALYTICS
+              track('seccion_vista', {
+                seccion: section.id,
+                url: window.location.pathname + '#' + section.id
+              });
+            }
+            foundNewSection = true;
             break;
           }
         }
       }
+      
+      //* Para la sección hero
+      if (!foundNewSection && activeSection !== "hero") {
+        setActiveSection("hero");
+        track('seccion_vista', {
+          seccion: "hero",
+          url: window.location.pathname + '#hero'
+        });
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
+    //* Disparar al cargar para registrar la sección inicial
+    handleScroll();
+    
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [activeSection]); //* activeSection como dependencia
 
   const stats = [
     { number: "15+", label: "Años de experiencia" },
@@ -90,10 +114,20 @@ export default function Home() {
       "Hola, me interesa solicitar una cotización para equipos de bombeo. ¿Podrían ayudarme?"
     );
     window.open(`https://wa.me/524273762379?text=${message}`, "_blank");
+    
+    //* Opcional: Rastrear clics en WhatsApp
+    track('click_whatsapp', {
+      seccion: activeSection
+    });
   };
 
   const handleEmailContact = () => {
     scrollToSection(contactRef);
+    
+    //* Opcional: Rastrear clics en "Cotizar por Correo"
+    track('click_email_contact', {
+      seccion: activeSection
+    });
   };
 
   const scrollToSection = (ref) => {
@@ -282,9 +316,7 @@ export default function Home() {
                 <img
                   src="/Engranajes.png"
                   alt="Excelencia en procesos"
-                  //className="w-48 2xl:w-60 h-48 2xl:h-60 object-contain mx-auto mb-3"
                   className="w-38 2xl:w-50 h-38 2xl:h-50 object-contain mx-auto mb-3"
-
                 />
 
                 <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
@@ -373,7 +405,7 @@ export default function Home() {
               Contáctanos por WhatsApp
             </button>
             <button
-              onClick={() => scrollToSection(contactRef)}
+              onClick={handleEmailContact}
               className="flex items-center justify-center gap-2 flex-1 bg-gray-800 text-white py-3 px-6 rounded-full font-semibold text-sm lg:text-base border-2 border-transparent transform hover:scale-[1.03] hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] transition duration-300 min-h-[48px]"
             >
               <MdEmail className="w-5 h-5" />
