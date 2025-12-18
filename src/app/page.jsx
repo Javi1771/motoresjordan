@@ -38,7 +38,6 @@ export default function Home() {
         setShowSideCards(newScrollY < heroHeight - 100);
       }
 
-      //* Determinar sección activa
       const sections = [
         { id: "hero", ref: heroRef },
         { id: "services", ref: servicesRef },
@@ -51,14 +50,16 @@ export default function Home() {
         if (section.ref.current) {
           const rect = section.ref.current.getBoundingClientRect();
           if (rect.top <= 100 && rect.bottom >= 100) {
-            //* Solo actualizar si la sección cambió
             if (section.id !== activeSection) {
               setActiveSection(section.id);
               
-              //* ENVIAR EVENTO A VERCEL ANALYTICS
-              track('seccion_vista', {
-                seccion: section.id,
-                url: window.location.pathname + '#' + section.id
+              //* ACTUALIZAR URL SIN RECARGAR
+              const newUrl = section.id === "hero" ? "/" : `/#${section.id}`;
+              window.history.pushState({}, "", newUrl);
+              
+              //* REGISTRAR COMO PAGE VIEW
+              track('pageview', {
+                path: newUrl
               });
             }
             foundNewSection = true;
@@ -67,22 +68,20 @@ export default function Home() {
         }
       }
       
-      //* Para la sección hero
       if (!foundNewSection && activeSection !== "hero") {
         setActiveSection("hero");
-        track('seccion_vista', {
-          seccion: "hero",
-          url: window.location.pathname + '#hero'
+        window.history.pushState({}, "", "/");
+        track('pageview', {
+          path: "/"
         });
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    //* Disparar al cargar para registrar la sección inicial
     handleScroll();
     
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection]); //* activeSection como dependencia
+  }, [activeSection]);
 
   const stats = [
     { number: "15+", label: "Años de experiencia" },
