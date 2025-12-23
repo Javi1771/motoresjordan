@@ -1,5 +1,6 @@
 // app/layout.jsx
-import { Analytics } from '@vercel/analytics/react'; // Importa Analytics
+import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script'; // Importar Script de Next.js
 
 export const metadata = { 
   title: 'Motores Jordan - Sistemas de Bombeo',
@@ -22,8 +23,25 @@ export default function RootLayout({ children }) {
       </head>
       <body className="bg-gray-900 text-white font-inter">
         {children}
-        {/* Agrega Analytics aquí */}
+        
+        {/* Vercel Analytics */}
         <Analytics />
+        
+        {/* Google Ads - Script externo */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-11120599318"
+          strategy="afterInteractive"
+        />
+        
+        {/* Google Ads - Configuración */}
+        <Script id="google-ads-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-11120599318');
+          `}
+        </Script>
       </body>
     </html>
   );
