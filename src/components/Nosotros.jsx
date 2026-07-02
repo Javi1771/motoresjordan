@@ -1,242 +1,168 @@
-import React, { useState } from "react";
-import {
-  Zap,
-  Shield,
-  Wrench,
-  Star,
-  Users,
-  Award,
-  Clock,
-  Target,
-  Heart,
-  TrendingUp,
-  CheckCircle,
-  Factory,
-} from "lucide-react";
-import { PiGearBold } from "react-icons/pi";
+import React from "react";
+
+const applications = [
+  { title: "CONSTRUCCIÓN", desc: "Bombas para achique, concreto y agua en obra" },
+  { title: "INDUSTRIA", desc: "Procesos químicos, alimentos, farmacéutico" },
+  { title: "RIEGO", desc: "Sistemas de irrigación agrícola y residencial" },
+  { title: "CONTRA INCENDIO", desc: "Equipos certificados para protección civil" },
+];
+
+const cards = [
+  { num: "01", label: "TRABAJO COOPERATIVO", value: "El conocimiento compartido y la sinergia entre equipo y cliente son la base de cada proyecto exitoso." },
+  { num: "02", label: "ESPECIALISTAS", value: "Expertos en motores eléctricos, bombas, reductores y transmisión de potencia para industria y comercio." },
+  { num: "03", label: "CALIDAD PREMIUM", value: "Refacciones genuinas y marcas líderes mundiales: Siemens, WEG, Pentair, Leeson y más." },
+  { num: "04", label: "SECTORES DIVERSOS", value: "Atendemos farmacéutico, alimenticio, construcción, agrícola, residencial e industrial." },
+  { num: "05", label: "SERVICIO RÁPIDO", value: "Stock permanente y entregas express para minimizar tiempos de paro en tu operación." },
+  { num: "06", label: "COMPROMISO TOTAL", value: "Recomendados por la excelencia en atención y servicio posventa. Tu satisfacción es nuestra meta." },
+];
+
+const stats = [
+  { number: "18+", label: "AÑOS DE\nEXPERIENCIA" },
+  { number: "2", label: "SUCURSALES\nQUERÉTARO" },
+  { number: "100%", label: "SATISFACCIÓN\nGARANTIZADA" },
+];
 
 export default function Nosotros() {
-  const [activeCard, setActiveCard] = useState(null);
-
-  const contentCards = [
-    {
-      id: 1,
-      icon: Users,
-      title: "Trabajo Cooperativo",
-      content:
-        "Creemos que el trabajo cooperativo y el conocimiento compartido son las claves del éxito.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 2,
-      icon: Factory,
-      title: "Especialistas Industriales",
-      content:
-        "Somos especialistas en motores eléctricos y reductores para diferentes sectores.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 3,
-      icon: Award,
-      title: "Calidad Premium",
-      content:
-        "Trabajamos con altos estándares de calidad, refacciones genuinas y marcas líderes para ofrecer el mejor servicio a precios competitivos.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 4,
-      icon: Target,
-      title: "Sectores Diversos",
-      content:
-        "Nuestros productos van dirigidos a cualquier sector: farmacéutico, comercial, reventa y residencial.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 5,
-      icon: Clock,
-      title: "Servicio Rápido",
-      content: "Para mantenimiento y entregas express.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 6,
-      icon: Heart,
-      title: "Compromiso Total",
-      content:
-        "Nuestro objetivo es ser recomendados por la excelencia de nuestro mantenimiento y atención al cliente.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 7,
-      icon: TrendingUp,
-      title: "Productos Premium",
-      content:
-        "Ofrecemos motores AC/DC, reductores, variadores, compresores, filtros, hidroneumáticos y sistemas contra incendio.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 8,
-      icon: CheckCircle,
-      title: "Satisfacción Garantizada",
-      content:
-        "Atención personalizada y cartera de clientes satisfechos que respaldan nuestra calidad-precio-atención.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-    {
-      id: 9,
-      icon: PiGearBold,
-      title: "Reductores IEC y NEMA",
-      content:
-        "Amplia variedad de reductores bajo norma IEC y NEMA, ideales para aplicaciones industriales exigentes.",
-      color: "from-[#BE171F] to-[#F43F48]",
-    },
-  ];
-
   return (
-    <section
-      id="about"
-      className="relative py-20 bg-gradient-to-r from-[#000] to-[#262626] overflow-hidden"
-    >
-      {/* Fondos decorativos */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-16 left-8 w-64 h-64 bg-[#BE171F] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-16 right-8 w-72 h-72 bg-[#F43F48] rounded-full blur-3xl"></div>
+    <section id="about" style={{ background: "var(--bg)" }}>
+
+      {/* ── Applications band (always black) ─── */}
+      <div className="section-pad" style={{ background: "#0E0E0F" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ maxWidth: 1280, margin: "0 auto", gap: 48, alignItems: "start" }}>
+          {/* Left: text */}
+          <div>
+            <span className="eyebrow">// APLICACIONES</span>
+            <h2 style={{
+              fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+              fontSize: "clamp(28px,3.5vw,42px)", textTransform: "uppercase",
+              color: "#EDEDED", margin: 0, marginBottom: 16, lineHeight: 1.05,
+            }}>
+              ¿POR QUÉ ELEGIR<br />
+              <span style={{ color: "#D81F26" }}>JORDAN?</span>
+            </h2>
+            <p style={{
+              fontFamily: "'Archivo',sans-serif", fontSize: 16,
+              color: "#9A9A9E", lineHeight: 1.55, maxWidth: 440, marginBottom: 12,
+            }}>
+              Somos una empresa proactiva, de origen queretano, fundada en el año 2008 y dedicada al comercio de motores eléctricos, motobombas, reductores y equipo de control.
+            </p>
+            <p style={{
+              fontFamily: "'Archivo',sans-serif", fontSize: 16,
+              color: "#9A9A9E", lineHeight: 1.55, maxWidth: 440, marginBottom: 0,
+            }}>
+              Con más de <strong style={{ color: "#D81F26" }}>18 años de experiencia</strong>, somos líderes en soluciones de bombeo industrial, transmisión de potencia y control industrial en San Juan del Río, Querétaro.
+            </p>
+
+            {/* Trust stats */}
+            <div style={{ display: "flex", gap: 0, marginTop: 40, borderTop: "1px solid #232327" }}>
+              {stats.map((s, i) => (
+                <div key={i} style={{
+                  flex: 1, padding: "20px 16px",
+                  borderRight: i < stats.length - 1 ? "1px solid #232327" : "none",
+                }}>
+                  <div style={{
+                    fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+                    fontSize: 32, color: "#EDEDED", lineHeight: 1,
+                  }}>
+                    {s.number}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Space Mono',monospace", fontSize: 10,
+                    color: "#6A6A70", whiteSpace: "pre-line", marginTop: 4,
+                    textTransform: "uppercase", lineHeight: 1.4,
+                  }}>
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: application tiles */}
+          <div className="nosotros-apps-grid">
+            {applications.map((a, i) => (
+              <div key={i} style={{
+                background: "#161618", border: "1px solid #26262A",
+                padding: "20px 18px",
+              }}>
+                <div style={{
+                  width: 10, height: 10, background: "#D81F26",
+                  marginBottom: 14,
+                }} />
+                <div style={{
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700,
+                  fontSize: 19, textTransform: "uppercase", color: "#EDEDED",
+                  lineHeight: 1, marginBottom: 8,
+                }}>
+                  {a.title}
+                </div>
+                <div style={{
+                  fontFamily: "'Space Mono',monospace", fontSize: 10,
+                  color: "#6A6A70", lineHeight: 1.5,
+                }}>
+                  {a.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4 relative">
-            <div className="w-20 h-20 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-2xl">
-              <Wrench className="w-10 h-10 text-white" />
-            </div>
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full"></div>
+      {/* ── Content cards ─────────────────────────────── */}
+      <div className="section-pad" style={{ background: "var(--bg2)" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ marginBottom: 40 }}>
+            <span className="eyebrow">// NUESTRA FILOSOFÍA</span>
+            <h3 style={{
+              fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+              fontSize: 32, textTransform: "uppercase", color: "var(--fg)",
+              margin: 0,
+            }}>
+              LO QUE NOS DISTINGUE
+            </h3>
           </div>
-          <h2 className="text-5xl font-bold text-white mb-6">
-            ¿Por qué elegir Jordan?
-          </h2>
-          <p className="max-w-3xl mx-auto text-2xl text-[#D0D0D1] leading-relaxed">
-            Con más de{" "}
-            <span className="text-[#BE171F] font-bold">
-              15 años de experiencia
-            </span>
-            , somos líderes en soluciones de bombeo industrial, transmisión de
-            potencia y control industrial en San Juan del Río, Querétaro.
-          </p>
-        </div>
 
-        {/* Grid interactiva */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {contentCards.map((card) => {
-            const Icon = card.icon;
-            const isActive = activeCard === card.id;
-            return (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 12 }}>
+            {cards.map((c, i) => (
               <div
-                key={card.id}
-                onMouseEnter={() => setActiveCard(card.id)}
-                onMouseLeave={() => setActiveCard(null)}
-                className={`relative group cursor-pointer transform transition-all duration-500 ${
-                  isActive ? "scale-105 z-20" : "z-10"
-                }`}
+                key={i}
+                style={{
+                  background: "var(--bg)", border: "1px solid var(--line)",
+                  padding: "24px 22px", position: "relative", overflow: "hidden",
+                  transition: "border-color .2s, transform .2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "#D81F26";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--line)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
               >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${card.color} rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`}
-                />
-                <div className="relative bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 flex flex-col h-full">
-                  <div className="flex items-center mb-4">
-                    <div
-                      className={`w-14 h-14 bg-gradient-to-r ${card.color} rounded-full flex items-center justify-center shadow-lg`}
-                    >
-                      <Icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3
-                      className={`ml-4 text-xl font-bold text-white transition-colors duration-300 ${
-                        isActive ? "text-[#BE171F]" : ""
-                      }`}
-                    >
-                      {card.title}
-                    </h3>
-                  </div>
-                  <p className="text-[#D0D0D1] flex-grow leading-relaxed">
-                    {card.content}
-                  </p>
-                  <div
-                    className={`mt-4 h-1 rounded-full bg-gradient-to-r ${card.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                  />
+                {/* Number watermark */}
+                <div style={{
+                  position: "absolute", top: 12, right: 16,
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+                  fontSize: 52, color: "var(--line)", lineHeight: 1, userSelect: "none",
+                }}>
+                  {c.num}
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Características principales */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {[
-            {
-              icon: Zap,
-              title: "Tecnología Avanzada",
-              text: "Equipos de última generación para máximo rendimiento",
-            },
-            {
-              icon: Shield,
-              title: "Garantía Total",
-              text: "Respaldamos la calidad de nuestros productos y servicios",
-            },
-            {
-              icon: Wrench,
-              title: "Servicio Integral",
-              text: "Desde la consultoría hasta el mantenimiento",
-            },
-            {
-              icon: Star,
-              title: "Experiencia Comprobada",
-              text: "Ventas diarias y coadyuvando proyectos exitosos nos respaldan",
-            },
-          ].map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={idx}
-                className="relative group flex items-start space-x-4 p-6 bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-gray-700/50 hover:scale-105 transition-transform duration-500"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-                <div className="relative flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-lg">
-                  <Icon className="w-7 h-7 text-white" />
+                {/* Red accent bar */}
+                <div style={{ width: 28, height: 3, background: "#D81F26", marginBottom: 16 }} />
+                <div style={{
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700,
+                  fontSize: 17, textTransform: "uppercase", color: "var(--fg)",
+                  lineHeight: 1.1, marginBottom: 10,
+                }}>
+                  {c.label}
                 </div>
-                <div className="relative">
-                  <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-[#F43F48] transition-colors duration-300">
-                    {item.title}
-                  </h4>
-                  <p className="text-[#8E8F91]">{item.text}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Imagen + Stats */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#BE171F] to-[#F43F48] rounded-3xl blur-2xl opacity-30"></div>
-            <div className="relative h-96 bg-gradient-to-br from-[#BE171F]/20 to-[#F43F48]/20 backdrop-blur-sm border border-gray-700/50 rounded-3xl flex items-center justify-center overflow-hidden">
-              <div className="text-center z-10">
-                <Wrench className="w-24 h-24 text-white mx-auto mb-4" />
-                <p className="text-3xl font-bold text-white">Ingeniería</p>
-                <p className="text-xl text-[#D0D0D1]">de Precisión</p>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-            {[
-              { label: "2" , desc: "Sucursales" },
-              { label: "15+ Años", desc: "Experiencia" },
-              { label: "100%", desc: "Satisfacción" },
-            ].map((stat, i) => (
-              <div key={i} className="group">
-                <div className="text-4xl font-bold text-[#F43F48] mb-2 group-hover:scale-110 transition-transform duration-300">
-                  {stat.label}
-                </div>
-                <div className="text-white text-lg">{stat.desc}</div>
+                <p style={{
+                  fontFamily: "'Archivo',sans-serif", fontSize: 13,
+                  color: "var(--muted)", lineHeight: 1.65, margin: 0,
+                }}>
+                  {c.value}
+                </p>
               </div>
             ))}
           </div>

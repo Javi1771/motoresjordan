@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Motores Jordan — Sitio Web Corporativo
 
-## Getting Started
+Sitio web para **Moto-Bombas y Reductores Jordan S.A. de C.V.**, especialistas en sistemas de bombeo, transmisión de potencia y motores eléctricos en San Juan del Río, Querétaro.
 
-First, run the development server:
+## Stack
+
+- **Framework:** Next.js 15 (App Router) + React 19
+- **Estilos:** Tailwind CSS 4 + variables CSS personalizadas (tokens de marca)
+- **Base de datos:** Prisma + PostgreSQL (Neon)
+- **Almacenamiento de imágenes:** Vercel Blob
+- **Autenticación:** JWT con cookie HttpOnly (`/api/auth`)
+- **Tipografías:** Saira Condensed, Archivo, Space Mono (Google Fonts)
+- **Analíticas:** Vercel Analytics + Google Tag Manager
+
+## Levantar en desarrollo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en el navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables de entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crea un archivo `.env.local` en la raíz:
 
-## Learn More
+```env
+# PostgreSQL (Neon) — formato: postgresql://user:password@host/dbname?sslmode=require
+DATABASE_URL="postgresql://..."
 
-To learn more about Next.js, take a look at the following resources:
+# Autenticación admin
+ADMIN_PASSWORD="tu_contraseña_segura"
+JWT_SECRET="cadena_aleatoria_larga_min_32_chars"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Vercel Blob (para subir imágenes desde el admin)
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy en Vercel
 
-## Deploy on Vercel
+### 1. Base de datos — Neon (PostgreSQL gratis)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Crea cuenta en [neon.tech](https://neon.tech)
+2. Crea un proyecto nuevo → copia el **Connection String**
+3. Pégalo como `DATABASE_URL` en Vercel → Settings → Environment Variables
+4. Corre las migraciones: `pnpm prisma db push`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2. Almacenamiento de imágenes — Vercel Blob
+
+1. En el dashboard de Vercel → tu proyecto → **Storage** → **Create Database** → **Blob**
+2. Vercel agrega `BLOB_READ_WRITE_TOKEN` automáticamente a las env vars del proyecto
+
+### 3. Variables de entorno en Vercel
+
+En **Settings → Environment Variables** agrega:
+
+| Variable | Valor |
+|---|---|
+| `DATABASE_URL` | Connection string de Neon |
+| `ADMIN_PASSWORD` | Tu contraseña del admin |
+| `JWT_SECRET` | Cadena aleatoria (mín. 32 caracteres) |
+| `BLOB_READ_WRITE_TOKEN` | Lo agrega Vercel Blob automáticamente |
+
+### 4. Deploy
+
+```bash
+# Con Vercel CLI
+pnpm dlx vercel --prod
+
+# O conecta el repo en vercel.com y hace auto-deploy en cada push a main
+```
+
+## Base de datos (local)
+
+```bash
+# Aplicar schema al DB
+pnpm db:push
+
+# Explorar datos en el navegador
+pnpm db:studio
+
+# Regenerar cliente Prisma después de cambios al schema
+pnpm db:generate
+```
+
+## Panel de administración
+
+Accede en `/admin`. Requiere autenticación con `ADMIN_PASSWORD`.
+
+### Secciones del admin
+
+| Sección | Ruta | Descripción |
+|---|---|---|
+| Dashboard | `/admin` | Estadísticas y accesos rápidos |
+| Banners | `/admin/banners` | Carrusel principal de la página |
+| Catálogo | `/admin/catalogo` | Productos destacados |
+| Promociones | `/admin/promociones` | Ofertas y descuentos |
+| Galería | `/admin/galeria` | Fotos de instalaciones y equipos |
+| Artículos | `/admin/articulos` | Blog y noticias |
+| Reseñas | `/admin/resenas` | Reseñas y propuestas de clientes |
+| Guía | `/admin/guia` | Manual de uso del panel |
+
+### Flujo de reseñas
+
+Las reseñas tienen 3 estados:
+- **PENDIENTE** — sin revisar
+- **REVISADA · NO PUBLICADA** — vista por el admin, no aparece en el sitio
+- **PUBLICADA** — visible en la sección de testimonios
+
+## Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── page.jsx          # Página principal pública
+│   ├── layout.jsx        # Layout raíz (metadatos, fonts, GTM)
+│   ├── globals.css       # Tokens de marca, utilidades CSS
+│   ├── admin/            # Panel de administración
+│   └── api/              # API Routes (REST)
+├── components/
+│   ├── sections/         # Secciones dinámicas de la página
+│   ├── admin/            # Componentes del panel admin
+│   └── interface/        # Componentes UI compartidos
+├── lib/
+│   ├── db.js             # Cliente Prisma singleton
+│   ├── auth.js           # Lógica JWT / sesión
+│   └── fmt.js            # Helpers de formato de fecha
+└── middleware.js          # Protección de rutas /admin
+```
+
+## Scripts disponibles
+
+```bash
+pnpm dev          # Servidor de desarrollo
+pnpm build        # Build de producción
+pnpm start        # Servidor de producción
+pnpm lint         # ESLint
+pnpm db:push      # Aplicar schema a la BD
+pnpm db:studio    # Prisma Studio (explorador de BD)
+```
+
+## Notas sobre imágenes estáticas del catálogo
+
+Las carpetas `public/marcas/`, `public/motores/`, `public/bombas/` y `public/refacciones/` contienen imágenes del catálogo comprometidas en el repositorio. Se sirven directamente desde Next.js y no requieren Vercel Blob.
+
+Solo las imágenes **subidas desde el admin** (banners, galería, promociones, artículos, productos) se almacenan en Vercel Blob.

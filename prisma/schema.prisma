@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id       String   @id @default(cuid())
+  nombre   String
+  email    String   @unique
+  password String
+  rol      String   @default("admin")
+  creadoEn DateTime @default(now())
+}
+
+model Categoria {
+  id        String     @id @default(cuid())
+  nombre    String     @unique
+  productos Producto[]
+}
+
+model Producto {
+  id          String     @id @default(cuid())
+  nombre      String
+  descripcion String?
+  precio      Float?
+  categoriaId String?
+  categoria   Categoria? @relation(fields: [categoriaId], references: [id])
+  imagen      String?
+  activo      Boolean    @default(true)
+  destacado   Boolean    @default(false)
+  orden       Int        @default(0)
+  creadoEn   DateTime   @default(now())
+}
+
+model Promocion {
+  id          String    @id @default(cuid())
+  titulo      String
+  descripcion String?
+  descuento   Float?
+  imagen      String?
+  fechaInicio DateTime?
+  fechaFin    DateTime?
+  activa      Boolean   @default(true)
+  creadoEn   DateTime  @default(now())
+}
+
+model Banner {
+  id     String  @id @default(cuid())
+  titulo String?
+  imagen String
+  enlace String?
+  orden  Int     @default(0)
+  activo Boolean @default(true)
+}
+
+model Galeria {
+  id          String   @id @default(cuid())
+  imagen      String
+  descripcion String?
+  orden       Int      @default(0)
+  creadoEn   DateTime @default(now())
+}
+
+model Articulo {
+  id        String   @id @default(cuid())
+  titulo    String
+  slug      String   @unique
+  contenido String
+  imagen    String?
+  publicado Boolean  @default(false)
+  creadoEn DateTime @default(now())
+}
+
+model Resena {
+  id        String   @id @default(cuid())
+  nombre    String
+  email     String?
+  mensaje   String
+  tipo      String   @default("resena") // "resena" | "propuesta"
+  rating    Int      @default(5)
+  revisada  Boolean  @default(false)
+  publicada Boolean  @default(false)
+  creadoEn DateTime @default(now())
+}
+
+model Configuracion {
+  id           String  @id @default("singleton")
+  telefono1    String?
+  telefono2    String?
+  correo       String?
+  whatsapp     String?
+  direccion1   String?
+  direccion2   String?
+  horario      String?
+  facebook     String?
+  instagram    String?
+  textoHero    String?
+  subtextoHero String?
+}

@@ -1,25 +1,300 @@
-/* globals.css */
+@import "tailwindcss";
+
+/* ── Brand tokens (fixed, both themes) ───────────── */
+:root {
+  --red:      #D81F26;
+  --red-ink:  #2A0A0C;
+  --black:    #0E0E0F;
+  --black-2:  #0B0B0C;
+}
+
+/* ── Dark theme (default) ───────────────────────── */
+[data-theme="dark"] {
+  --bg:      #0E0E0F;
+  --bg2:     #141416;
+  --bg3:     #18181b;
+  --line:    #232327;
+  --cardline:#232327;
+  --fg:      #EDEDED;
+  --muted:   #9A9A9E;
+  --faint:   #6A6A70;
+}
+
+/* ── Light theme ─────────────────────────────────── */
+[data-theme="light"] {
+  --bg:      #F4F2EF;
+  --bg2:     #FFFFFF;
+  --bg3:     #ECEAE6;
+  --line:    #D8D2C9;
+  --cardline:#D8D2C9;
+  --fg:      #161616;
+  --muted:   #4A4540;
+  --faint:   #7A746D;
+}
+
 @layer base {
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg, #0E0E0F);
+  }
   body {
-    /* opcional: si usas font-inter como clase en <body> no lo necesitarías aquí */
-    /* font-family: 'Inter', sans-serif; */
     overflow-x: hidden;
+    font-family: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Scrollbars */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: #222223; }
-::-webkit-scrollbar-thumb { background: #F43F48; border-radius:5px; }
-::-webkit-scrollbar-thumb:hover { background:#E22029; }
-
-/* Animación “float” si la quieres reutilizar */
-@keyframes float {
-  0%   { transform: translateY(0) }
-  50%  { transform: translateY(-10px) }
-  100% { transform: translateY(0) }
+/* ── Caution stripe ──────────────────────────────── */
+.stripe-caution {
+  height: 6px;
+  flex-shrink: 0;
+  background: repeating-linear-gradient(135deg, #D81F26 0 16px, #0E0E0F 16px 32px);
 }
-.float-animation {
-  animation: float 3s ease-in-out infinite;
+
+/* ── Image placeholder (diagonal stripes) ─────────── */
+.img-placeholder {
+  background: repeating-linear-gradient(135deg, var(--bg3) 0 12px, var(--bg2) 12px 24px);
+  border: 1px solid var(--line);
+}
+
+/* ── Typography helpers ──────────────────────────── */
+.font-display {
+  font-family: 'Saira Condensed', ui-sans-serif, sans-serif;
+}
+.font-mono-brand {
+  font-family: 'Space Mono', ui-monospace, monospace;
+}
+
+/* ── Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+::-webkit-scrollbar-thumb:hover { background: #F43F48; }
+
+/* ── Hide-scrollbar utility ─────────────────────── */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── Section eyebrow ─────────────────────────────── */
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+
+/* ── Hide scrollbar (carousel tracks) ───────────── */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Responsive section padding ─────────────────── */
+.section-pad { padding: 60px 48px; }
+
+@media (max-width: 900px) {
+  .section-pad { padding: 48px 28px; }
+}
+@media (max-width: 640px) {
+  .section-pad { padding: 40px 20px; }
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.footer-cta-strip {
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: 16px; padding: 20px 48px;
+}
+.footer-main-pad { padding: 52px 48px 36px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 44px; margin-bottom: 44px; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 900px) {
+  .footer-main-pad { padding: 40px 28px 28px; }
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+  .footer-cta-strip { padding: 18px 28px; }
+}
+@media (max-width: 640px) {
+  .footer-cta-strip { padding: 16px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
+  .footer-main-pad { padding: 32px 20px 24px !important; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .footer-bottom { flex-direction: column !important; align-items: flex-start !important; }
+}
+
+/* ── Nosotros ─────────────────────────────────────── */
+.nosotros-apps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 480px) {
+  .nosotros-apps-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── Admin panel ─────────────────────────────────── */
+/* Default (desktop) */
+.admin-sidebar     { display: flex; flex-direction: column; }
+.admin-mobile-bar  { display: none; }
+.admin-content-pad { padding: 36px 40px; }
+
+@media (max-width: 1023px) {
+  .admin-sidebar    { display: none; }
+  .admin-main       { margin-left: 0 !important; }
+  .admin-mobile-bar { display: flex; }
+  .admin-content-pad { padding: 24px 16px; }
+}
+
+/* Admin input (theme-aware) */
+.admin-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  font-family: 'Archivo', sans-serif;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .15s;
+}
+.admin-input:focus { border-color: #D81F26; }
+.admin-input::placeholder { color: var(--faint); }
+
+/* Contacto section responsive */
+@media (max-width: 640px) {
+  .contacto-cta        { padding: 24px 20px !important; flex-direction: column !important; }
+  .contacto-form-grid  { grid-template-columns: 1fr !important; }
+  .contacto-form-pad   { padding: 20px !important; }
+}
+
+/* ── Float animation ──────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float-animation { animation: float 3s ease-in-out infinite; }
+
+/* ── Entrance animations ─────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.anim-fade-up  { animation: fadeUp  .5s ease both; }
+.anim-fade-in  { animation: fadeIn  .4s ease both; }
+.anim-delay-1  { animation-delay: .1s; }
+.anim-delay-2  { animation-delay: .2s; }
+.anim-delay-3  { animation-delay: .3s; }
+.anim-delay-4  { animation-delay: .4s; }
+.anim-delay-5  { animation-delay: .5s; }
+
+/* ── Focus visible ring ──────────────────────────── */
+:focus-visible {
+  outline: 2px solid #D81F26;
+  outline-offset: 2px;
+}
+
+/* ── Skip navigation link (CSS-only, no JS handlers) ── */
+.skip-nav {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: #D81F26;
+  color: #fff;
+  font-family: 'Archivo', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top .15s;
+}
+.skip-nav:focus {
+  top: 0;
+}
+
+/* ── Contacto form buttons ────────────────────────── */
+.contacto-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) {
+  .contacto-btns { grid-template-columns: 1fr; }
+}
+
+/* ── Admin 2-col grid (collapses on mobile) ──────── */
+.admin-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) {
+  .admin-2col { grid-template-columns: 1fr; }
+}
+
+/* ── Admin dashboard title ───────────────────────── */
+.admin-dash-h1 {
+  font-family: 'Saira Condensed', sans-serif;
+  font-weight: 800; font-size: 36px;
+  text-transform: uppercase; color: var(--fg);
+  margin: 0 0 6px; line-height: 1;
+}
+@media (max-width: 640px) {
+  .admin-dash-h1 { font-size: 24px; }
+}
+
+/* ── Admin stat cards grid ───────────────────────── */
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 36px;
+}
+@media (max-width: 900px) { .admin-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 360px) { .admin-stat-grid { grid-template-columns: 1fr; } }
+
+/* ── Admin guide content padding ─────────────────── */
+.admin-guide-content { padding: 20px 24px; }
+@media (max-width: 640px) {
+  .admin-guide-content { padding: 16px; }
+}
+
+/* ── Admin main: prevent flex-item overflow on mobile ── */
+.admin-main { min-width: 0; overflow-x: hidden; }
+
+/* ── Admin quick access: table on desktop, cards on mobile ── */
+.admin-quick-table { display: block; }
+.admin-quick-cards { display: none; }
+@media (max-width: 640px) {
+  .admin-quick-table { display: none; }
+  .admin-quick-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+}
+
+/* ── Admin guide tabs: tabs on desktop, select on mobile ── */
+.admin-guide-tabs-desktop { display: flex; gap: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.admin-guide-tabs-mobile  { display: none; padding: 12px; border-bottom: 1px solid var(--line); }
+@media (max-width: 640px) {
+  .admin-guide-tabs-desktop { display: none; }
+  .admin-guide-tabs-mobile  { display: block; }
+}
+
+/* ── Light mode input/select fix ─────────────────── */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  color-scheme: light;
+}
+/* Inputs and textareas that use var(--bg) need readable placeholder */
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: var(--faint);
 }

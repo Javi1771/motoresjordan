@@ -1,271 +1,312 @@
-// Servicios.js
-import React from "react";
-import { SiGoogleearthengine } from "react-icons/si";
+"use client";
+import { useState } from "react";
+import { Wrench, ClipboardList } from "lucide-react";
 import ProveedoresCarousel from "./interface/ProveedoresCarousel";
 
+const services = [
+  {
+    title: "Tanques Hidroneumáticos",
+    description: "Sistemas de presión constante para aplicaciones industriales y residenciales con tecnología de vanguardia",
+    image: "/Tanque_hidroneumatico.png",
+    alt: "Tanque Hidroneumático",
+    features: ["Presión constante", "Ahorro energético", "Larga durabilidad"],
+    tag: "HIDRÁULICA",
+  },
+  {
+    title: "Motores Baldor",
+    description: "Motores eléctricos de alta eficiencia para todas tus necesidades industriales más exigentes",
+    image: "/Motor_baldor.png",
+    alt: "Motor Baldor",
+    features: ["Alta eficiencia", "Bajo mantenimiento", "Tecnología avanzada"],
+    tag: "ELÉCTRICO",
+  },
+  {
+    title: "Soluciones Industriales",
+    description: "Equipamiento completo para la industria con asesoría especializada, armado de bombas y visitas de campo",
+    image: "/industria_bebidas.png",
+    alt: "Industria",
+    features: ["Soluciones integrales", "Asesoría técnica", "Instalación profesional"],
+    tag: "INDUSTRIAL",
+  },
+];
+
+const extraServices = [
+  {
+    num: "01",
+    tag: "REPARACIÓN",
+    title: "Reparación de Equipos",
+    description: "Realizamos servicio de reparación de bombas, motores, reductores e hidroneumáticos, todo bajo una revisión previa y en nuestras instalaciones.",
+    features: ["Diagnóstico previo", "Taller propio", "Refacciones originales"],
+    Icon: Wrench,
+  },
+  {
+    num: "02",
+    tag: "ASESORÍA",
+    title: "Asesoría Técnica",
+    description: "Ofrecemos visitas técnicas para levantamiento de datos y propuestas de mejora en sus procesos productivos.",
+    features: ["Visitas de campo", "Levantamiento de datos", "Propuestas de mejora"],
+    Icon: ClipboardList,
+  },
+];
+
+function ExtraServiceRow({ num, tag, title, description, features, Icon }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      className="block lg:grid"
+      style={{
+        position: "relative",
+        gridTemplateColumns: "72px 1fr 260px",
+        background: hovered ? "var(--bg3)" : "var(--bg2)",
+        borderTop: "1px solid var(--line)",
+        borderRight: "1px solid var(--line)",
+        borderBottom: "1px solid var(--line)",
+        borderLeft: `4px solid ${hovered ? "#f02530" : "#D81F26"}`,
+        overflow: "hidden",
+        transition: "background .2s, border-color .2s",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Watermark number */}
+      <div style={{
+        position: "absolute", right: 28, top: "50%",
+        transform: "translateY(-50%)",
+        fontFamily: "'Saira Condensed',sans-serif",
+        fontWeight: 800, fontSize: 130, lineHeight: 1,
+        color: "var(--line)", userSelect: "none", pointerEvents: "none",
+        zIndex: 0, letterSpacing: -4,
+      }}>
+        {num}
+      </div>
+
+      {/* Icon column — hidden on mobile */}
+      <div className="hidden lg:flex" style={{
+        alignItems: "center", justifyContent: "center",
+        background: "rgba(216,31,38,.07)",
+        borderRight: "1px solid var(--line)",
+        position: "relative", zIndex: 1,
+      }}>
+        <div style={{
+          width: 44, height: 44, background: "#D81F26",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
+          boxShadow: hovered ? "0 0 20px rgba(216,31,38,.35)" : "none",
+          transition: "box-shadow .3s",
+        }}>
+          <Icon size={20} color="#fff" />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{
+        padding: "28px 28px",
+        position: "relative", zIndex: 1,
+      }}>
+        {/* Icon visible only on mobile — inline with tag */}
+        <div className="flex lg:hidden" style={{
+          alignItems: "center", gap: 12, marginBottom: 12,
+        }}>
+          <div style={{
+            width: 36, height: 36, background: "#D81F26", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Icon size={16} color="#fff" />
+          </div>
+          <span style={{
+            fontFamily: "'Space Mono',monospace", fontSize: 9, fontWeight: 700,
+            letterSpacing: 2, color: "#D81F26", textTransform: "uppercase",
+          }}>
+            // {tag}
+          </span>
+        </div>
+
+        <span className="hidden lg:block" style={{
+          fontFamily: "'Space Mono',monospace", fontSize: 9, fontWeight: 700,
+          letterSpacing: 2, color: "#D81F26", textTransform: "uppercase",
+          marginBottom: 8,
+        }}>
+          // {tag}
+        </span>
+        <h3 style={{
+          fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+          fontSize: "clamp(20px,2vw,28px)", textTransform: "uppercase",
+          color: "var(--fg)", margin: 0, marginBottom: 10, lineHeight: 1,
+        }}>
+          {title}
+        </h3>
+        <p style={{
+          fontFamily: "'Archivo',sans-serif", fontSize: 14,
+          color: "var(--muted)", lineHeight: 1.65, margin: 0,
+        }}>
+          {description}
+        </p>
+
+        {/* Features visible only on mobile */}
+        <div className="flex lg:hidden" style={{
+          flexDirection: "column", gap: 10, marginTop: 16,
+          paddingTop: 16, borderTop: "1px solid var(--line)",
+        }}>
+          {features.map((f, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 6, height: 6, background: "#D81F26", flexShrink: 0 }} />
+              <span style={{
+                fontFamily: "'Archivo',sans-serif", fontSize: 13,
+                fontWeight: 600, color: "var(--fg)",
+              }}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Features — desktop only */}
+      <div className="hidden lg:flex" style={{
+        padding: "28px 32px",
+        borderLeft: "1px solid var(--line)",
+        flexDirection: "column",
+        justifyContent: "center", gap: 12,
+        position: "relative", zIndex: 1,
+      }}>
+        {features.map((f, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              width: 20, height: 20, background: "rgba(216,31,38,.12)",
+              border: "1px solid rgba(216,31,38,.3)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              flexShrink: 0,
+            }}>
+              <div style={{ width: 5, height: 5, background: "#D81F26" }} />
+            </div>
+            <span style={{
+              fontFamily: "'Archivo',sans-serif", fontSize: 13,
+              fontWeight: 600, color: "var(--fg)", whiteSpace: "nowrap",
+            }}>
+              {f}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const providers = [
+  "aquapak.jpg","aro.png","barnes.jpg","Bell_Gossett_rgb.jpg","bonasa.jpg",
+  "goulds.jpg","grundfos.jpg","LittleGiant.jpg","Logo-Evans-600.png","mann_pumps.png",
+  "Myers_Logo.png","nord_drive_systems.jpg","OIP.jpg","oli-logo.png","Pedrollo.png",
+  "q_pumps.png","sumitomo.jpg","trasnstecno.jpg","us_motors.jpg","wdm-pumms.png",
+  "weg-logo.png","Yamada.jpg",
+];
+
 export default function Servicios() {
-  const services = [
-    {
-      title: "Tanques Hidroneumáticos",
-      description:
-        "Sistemas de presión constante para aplicaciones industriales y residenciales con tecnología de vanguardia",
-      image: "/Tanque_hidroneumatico.png",
-      alt: "Tanque Hidroneumático",
-      features: ["Presión constante", "Ahorro energético", "Larga durabilidad"],
-      color: "bg-gradient-to-br from-red-500 via-red-600 to-red-700",
-      shadowColor: "shadow-red-500/20",
-    },
-    {
-      title: "Motores Baldor",
-      description:
-        "Motores eléctricos de alta eficiencia para todas tus necesidades industriales más exigentes",
-      image: "/Motor_baldor.png",
-      alt: "Motor Baldor",
-      features: [
-        "Alta eficiencia",
-        "Bajo mantenimiento",
-        "Tecnología avanzada",
-      ],
-      color: "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700",
-      shadowColor: "shadow-blue-500/20",
-    },
-    {
-      title: "Soluciones Industriales",
-      description:
-        "Equipamiento completo para la industria de bebidas y procesos con asesoría especializada",
-      image: "/industria_bebidas.png",
-      alt: "Industria Bebidas",
-      features: [
-        "Soluciones integrales",
-        "Asesoría técnica",
-        "Instalación profesional",
-      ],
-      color: "bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700",
-      shadowColor: "shadow-amber-500/20",
-    },
-  ];
-
-  const providers = [
-    "aquapak.jpg",
-    "aro.png",
-    "barnes.jpg",
-    "Bell_Gossett_rgb.jpg",
-    "bonasa.jpg",
-    "goulds.jpg",
-    "grundfos.jpg",
-    "LittleGiant.jpg",
-    "Logo-Evans-600.png",
-    "mann_pumps.png",
-    "Myers_Logo.png",
-    "nord_drive_systems.jpg",
-    "OIP.jpg",
-    "oli-logo.png",
-    "Pedrollo.png",
-    "q_pumps.png",
-    "sumitomo.jpg",
-    "trasnstecno.jpg",
-    "us_motors.jpg",
-    "wdm-pumms.png",
-    "weg-logo.png",
-    "Yamada.jpg",
-  ];
-
   return (
     <section
       id="services"
-      className="py-20 bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] relative overflow-hidden"
+      className="section-pad"
+      style={{ background: "var(--bg)" }}
     >
-      {/* Elementos decorativos mejorados */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-red-600/5 via-transparent to-blue-600/5"></div>
-        <div className="absolute top-20 left-10 w-96 h-96 rounded-full bg-red-600/10 blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-20 w-80 h-80 rounded-full bg-blue-600/10 blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-amber-600/5 blur-3xl animate-pulse delay-2000"></div>
-      </div>
-
-      {/* Patrón de puntos */}
-      <div className="absolute inset-0 opacity-20">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0)",
-            backgroundSize: "40px 40px",
-          }}
-        ></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-block mb-6">
-            <span className="text-sm font-medium text-red-400 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
-              NUESTROS SERVICIOS
-            </span>
-          </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight">
-            Soluciones{" "}
-            <span className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent">
-              Industriales
-            </span>
-            <br />
-            de Primera Clase
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        {/* Header */}
+        <div style={{ marginBottom: 48 }}>
+          <span className="eyebrow">// SERVICIOS</span>
+          <h2 style={{
+            fontFamily: "'Saira Condensed',sans-serif",
+            fontWeight: 800, fontSize: "clamp(32px,4vw,44px)",
+            textTransform: "uppercase", color: "var(--fg)",
+            margin: 0, lineHeight: 1.05,
+          }}>
+            SOLUCIONES INDUSTRIALES<br />
+            <span style={{ color: "#D81F26" }}>DE PRIMERA CLASE</span>
           </h2>
-          <div className="w-32 h-1 bg-gradient-to-r from-red-500 to-red-600 mx-auto mb-8 rounded-full"></div>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Equipamiento de vanguardia y soluciones integrales para todas tus
-            necesidades industriales, incluyendo armado de bombas y visitas de
-            campo, respaldado por la experiencia y calidad que tu empresa
-            merece.
+          <p style={{
+            fontFamily: "'Archivo',sans-serif", fontSize: 16, color: "var(--muted)",
+            lineHeight: 1.55, maxWidth: 580, marginTop: 14,
+          }}>
+            Equipamiento de vanguardia y soluciones integrales para todas tus necesidades industriales, respaldado por 15 años de experiencia.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
-          {services.map((service, index) => (
+        {/* Main service cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 18, marginBottom: 18 }}>
+          {services.map((s, i) => (
             <div
-              key={index}
-              className={`group relative bg-gradient-to-b from-[#1f1f1f] to-[#0f0f0f] rounded-3xl p-8 transition-all duration-700 border border-[#333] hover:border-red-500/50 hover:shadow-2xl ${service.shadowColor} hover:shadow-2xl hover:-translate-y-2 overflow-hidden`}
+              key={i}
+              style={{
+                background: "var(--bg2)", border: "1px solid var(--cardline)",
+                borderRadius: 3, overflow: "hidden",
+              }}
             >
-              {/* Efectos de brillo */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]"></div>
-
-              {/* Borde superior brillante */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-              {/* Icono y imagen container */}
-              <div className="relative mb-8">
-                {/* Imagen del servicio con mejor presentación */}
-                <div className="relative w-full h-48 mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-[#3a3a3a] group-hover:border-red-500/30 transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10"></div>
-                  <img
-                    src={service.image}
-                    alt={service.alt}
-                    className="w-full h-full object-cover object-center transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
+              <div style={{ position: "relative", aspectRatio: "4/3", background: "var(--bg3)" }}>
+                <img
+                  src={s.image}
+                  alt={s.alt}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                <span style={{
+                  position: "absolute", top: 10, left: 10,
+                  background: "#D81F26", color: "#fff",
+                  fontFamily: "'Space Mono',monospace", fontSize: 9, fontWeight: 700,
+                  padding: "4px 8px", borderRadius: 2,
+                }}>
+                  {s.tag}
+                </span>
               </div>
-
-              <h3 className="text-2xl font-bold mb-4 text-white text-center group-hover:text-red-400 transition-colors duration-500">
-                {service.title}
-              </h3>
-
-              <p className="text-gray-400 mb-8 text-center leading-relaxed group-hover:text-gray-300 transition-colors duration-500">
-                {service.description}
-              </p>
-
-              <div className="space-y-4">
-                {service.features.map((feature, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] py-3 px-5 rounded-xl border border-[#333] group-hover:border-red-500/30 transition-all duration-500 transform hover:translate-x-2"
-                    style={{ animationDelay: `${i * 100}ms` }}
-                  >
-                    <div className="mr-4 bg-gradient-to-r from-red-500 to-red-600 p-2 rounded-full shadow-lg">
-                      <SiGoogleearthengine className="w-4 h-4 text-white" />
+              <div style={{ padding: 24 }}>
+                <h3 style={{
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700,
+                  fontSize: 21, textTransform: "uppercase", color: "var(--fg)",
+                  lineHeight: 1, margin: 0, marginBottom: 10,
+                }}>
+                  {s.title}
+                </h3>
+                <p style={{
+                  fontFamily: "'Archivo',sans-serif", fontSize: 14,
+                  color: "var(--muted)", lineHeight: 1.55, marginBottom: 20,
+                }}>
+                  {s.description}
+                </p>
+                <div style={{ borderTop: "1px solid var(--line)", paddingTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {s.features.map((f, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 6, height: 6, background: "#D81F26", flexShrink: 0 }} />
+                      <span style={{ fontFamily: "'Archivo',sans-serif", fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>
+                        {f}
+                      </span>
                     </div>
-                    <span className="text-gray-200 font-medium flex-1">
-                      {feature}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Sección de proveedores con carrusel premium */}
-        <div className="mt-32 relative">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
+        {/* Extra services */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 72 }}>
+          {extraServices.map((s, i) => <ExtraServiceRow key={i} {...s} />)}
+        </div>
 
-          <div className="text-center mb-16 pt-12">
-            <div className="inline-block mb-6">
-              <span className="text-sm font-medium text-red-400 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
-                NUESTROS SOCIOS
-              </span>
-            </div>
-            <h3 className="text-4xl font-bold text-white mb-6">
-              Trabajamos con las{" "}
-              <span className="bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-                mejores marcas
-              </span>
+        {/* Providers */}
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: 56 }}>
+          <div style={{ marginBottom: 36 }}>
+            <span className="eyebrow">// SOCIOS COMERCIALES</span>
+            <h3 style={{
+              fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800,
+              fontSize: "clamp(28px,3.5vw,40px)", textTransform: "uppercase",
+              color: "var(--fg)", margin: 0, lineHeight: 1.05,
+            }}>
+              TRABAJAMOS CON LAS <span style={{ color: "#D81F26" }}>MEJORES MARCAS</span>
             </h3>
-            <p className="text-gray-300 mb-12 max-w-3xl mx-auto text-lg">
-              Más de 20 proveedores líderes en el mercado respaldan nuestros
-              servicios con equipos de la más alta calidad y tecnología de
-              vanguardia.
+            <p style={{
+              fontFamily: "'Archivo',sans-serif", fontSize: 15, color: "var(--muted)",
+              marginTop: 10, maxWidth: 500,
+            }}>
+              Más de 20 proveedores líderes respaldan nuestros servicios con equipos de la más alta calidad.
             </p>
           </div>
-
-          {/* Usamos el componente de carrusel */}
           <ProveedoresCarousel providers={providers} />
         </div>
       </div>
-
-      <style jsx global>{`
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-
-        @keyframes float1 {
-          0%,
-          100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(5px, -5px) rotate(5deg);
-          }
-          50% {
-            transform: translate(10px, 5px) rotate(-5deg);
-          }
-          75% {
-            transform: translate(-5px, 10px) rotate(3deg);
-          }
-        }
-
-        @keyframes float2 {
-          0%,
-          100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(-8px, 5px) rotate(-3deg);
-          }
-          50% {
-            transform: translate(5px, -8px) rotate(2deg);
-          }
-          75% {
-            transform: translate(-10px, -5px) rotate(-2deg);
-          }
-        }
-
-        @keyframes float3 {
-          0%,
-          100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(7px, 10px) rotate(1deg);
-          }
-          50% {
-            transform: translate(-7px, -10px) rotate(-1deg);
-          }
-          75% {
-            transform: translate(10px, -7px) rotate(4deg);
-          }
-        }
-
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-
-        .transform-style-3d {
-          transform-style: preserve-3d;
-        }
-      `}</style>
     </section>
   );
 }

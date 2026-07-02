@@ -1,581 +1,552 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Menu,
-  X,
-  Users,
-  Droplet,
-  Zap,
-  CheckCircle,
-  Award,
-  Leaf,
-} from "lucide-react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { Menu, X } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
-import { MdEmail } from "react-icons/md";
-import Particles from "../components/Particles";
+import { track } from "@vercel/analytics";
+
+import ThemeToggle from "../components/ThemeToggle";
 import Servicios from "../components/Servicios";
 import Contacto from "../components/Contacto";
 import Nosotros from "../components/Nosotros";
-import { track } from '@vercel/analytics'; 
+import Footer from "../components/Footer";
+import CatalogoDestacado from "../components/sections/CatalogoDestacado";
+import PromocionesSection from "../components/sections/PromocionesSection";
+import GaleriaSection from "../components/sections/GaleriaSection";
+import Testimonios from "../components/sections/Testimonios";
+import ReviewForm from "../components/sections/ReviewForm";
+import MisionVision from "../components/sections/MisionVision";
+import ClientesIndustriales from "../components/sections/ClientesIndustriales";
+import SectoresSection from "../components/sections/SectoresSection";
+import ImageCarousel from "../components/interface/ImageCarousel";
+import BannersSection from "../components/sections/BannersSection";
+import ArticulosSection from "../components/sections/ArticulosSection";
+
+const ALL_NAV_LINKS = [
+  { label: "Servicios",   id: "services",    always: true },
+  { label: "Catálogo",    id: "catalogo",    always: false },
+  { label: "Promociones", id: "promociones", always: false },
+  { label: "Galería",     id: "galeria",     always: false },
+  { label: "Artículos",   id: "articulos",   always: false },
+  { label: "Nosotros",    id: "about",       always: true },
+  { label: "Contacto",    id: "contacto",    always: true },
+];
+
+const STATS = [
+  { number: "15+",  label: "AÑOS DE\nEXPERIENCIA" },
+  //{ number: "100+", label: "PRODUCTOS\nEN STOCK" },
+  { number: "2",    label: "SUCURSALES\nEN QRO." },
+  { number: "100%", label: "SATISFACCIÓN\nGARANTIZADA" },
+];
+
+function NavLink({ label, num, active, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const lit = active || hovered;
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative", background: "none", border: "none",
+        cursor: "pointer", padding: "20px 12px 18px",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+      }}
+    >
+      {/* Number tag */}
+      <span style={{
+        fontFamily: "'Space Mono',monospace", fontSize: 8, fontWeight: 700,
+        letterSpacing: 2, lineHeight: 1,
+        color: active ? "#D81F26" : hovered ? "rgba(216,31,38,.6)" : "var(--faint)",
+        transition: "color .2s",
+      }}>
+        {num}
+      </span>
+
+      {/* Label */}
+      <span style={{
+        fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700,
+        fontSize: 13, letterSpacing: 1.5, textTransform: "uppercase",
+        color: active ? "#fff" : hovered ? "#EDEDED" : "#9A9A9E",
+        transition: "color .2s", lineHeight: 1,
+      }}>
+        {label}
+      </span>
+
+      {/* Animated underline */}
+      <span style={{
+        position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)",
+        height: 2, background: "#D81F26",
+        width: lit ? "100%" : "0%",
+        transition: "width .25s ease",
+      }} />
+    </button>
+  );
+}
+
+const HERO_SIDE_IMAGES = ["/triangulo.png", "/Engranajes.png"];
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [showSideCards, setShowSideCards] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
-  const heroRef = useRef(null);
-  const servicesRef = useRef(null);
-  const aboutRef = useRef(null);
-  const contactRef = useRef(null);
+  const [heroImage, setHeroImage] = useState(null);
+  // null = still loading, true = has content, false = empty → hide from nav
+  const [sectionVisible, setSectionVisible] = useState({ catalogo: null, promociones: null, galeria: null, articulos: null });
+
+  const heroRef       = useRef(null);
+  const servicesRef   = useRef(null);
+  const catalogoRef   = useRef(null);
+  const promocionesRef= useRef(null);
+  const galeriaRef    = useRef(null);
+  const articulosRef  = useRef(null);
+  const aboutRef      = useRef(null);
+  const contactRef    = useRef(null);
+
+  const sectionRefs = {
+    hero:       heroRef,
+    services:   servicesRef,
+    catalogo:   catalogoRef,
+    promociones:promocionesRef,
+    galeria:    galeriaRef,
+    articulos:  articulosRef,
+    about:      aboutRef,
+    contacto:   contactRef,
+  };
+
+  // Only show dynamic nav items once we know they have content
+  const navLinks = ALL_NAV_LINKS.filter(({ id, always }) =>
+    always || sectionVisible[id] === true
+  );
+
+  useLayoutEffect(() => {
+    setHeroImage(HERO_SIDE_IMAGES[Math.floor(Math.random() * HERO_SIDE_IMAGES.length)]);
+  }, []);
+
+  function markVisible(id, hasContent) {
+    setSectionVisible((prev) => ({ ...prev, [id]: hasContent }));
+  }
 
   useEffect(() => {
-    const handleScroll = () => {
-      const newScrollY = window.scrollY;
-      setScrollY(newScrollY);
-
-      if (heroRef.current) {
-        const heroHeight = heroRef.current.offsetHeight;
-        setShowSideCards(newScrollY < heroHeight - 100);
-      }
-
-      const sections = [
-        { id: "hero", ref: heroRef },
-        { id: "services", ref: servicesRef },
-        { id: "about", ref: aboutRef },
-        { id: "contact", ref: contactRef },
-      ];
-
-      let foundNewSection = false;
-      for (const section of sections) {
-        if (section.ref.current) {
-          const rect = section.ref.current.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            if (section.id !== activeSection) {
-              setActiveSection(section.id);
-              
-              //* ACTUALIZAR URL SIN RECARGAR
-              const newUrl = section.id === "hero" ? "/" : `/#${section.id}`;
-              window.history.pushState({}, "", newUrl);
-              
-              //* REGISTRAR COMO PAGE VIEW
-              track('pageview', {
-                path: newUrl
-              });
-            }
-            foundNewSection = true;
-            break;
-          }
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10);
+      let found = "hero";
+      for (const [id, ref] of Object.entries(sectionRefs)) {
+        if (ref.current) {
+          const { top, bottom } = ref.current.getBoundingClientRect();
+          if (top <= 100 && bottom >= 100) { found = id; break; }
         }
       }
-      
-      if (!foundNewSection && activeSection !== "hero") {
-        setActiveSection("hero");
-        window.history.pushState({}, "", "/");
-        track('pageview', {
-          path: "/"
-        });
+      if (found !== activeSection) {
+        setActiveSection(found);
+        window.history.replaceState({}, "", found === "hero" ? "/" : `/#${found}`);
+        track("pageview", { path: found === "hero" ? "/" : `/#${found}` });
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [activeSection]);
 
-  const stats = [
-    { number: "15+", label: "Años de experiencia" },
-    { number: "100+", label: "Amplio stock de productos" },
-    { number: "100%", label: "Satisfacción garantizada" },
-    { number: "#1", label: "Soporte técnico especializado" },
-  ];
+  function scrollTo(id) {
+    setMenuOpen(false);
+    const ref = sectionRefs[id];
+    if (!ref?.current) return;
+    const top = ref.current.getBoundingClientRect().top + window.scrollY - 66;
+    requestAnimationFrame(() => window.scrollTo({ top, behavior: "smooth" }));
+  }
 
-  const features = [
-    {
-      icon: <Droplet className="text-[#BE171F]" size={28} />,
-      title: "Bombeo eficiente",
-      description: "Sistemas optimizados para máximo rendimiento",
-    },
-    {
-      icon: <Zap className="text-[#BE171F]" size={28} />,
-      title: "Ahorro energético",
-      description: "Filtros para la reutilización del vital líquido",
-    },
-    {
-      icon: <CheckCircle className="text-[#BE171F]" size={28} />,
-      title: "Calidad certificada",
-      description: "Normas internacionales de fabricación",
-    },
-  ];
-
-  const handleWhatsApp = () => {
-    const message = encodeURIComponent(
-      "Hola, me interesa solicitar una cotización para equipos de bombeo. ¿Podrían ayudarme?"
-    );
-    window.open(`https://wa.me/524273762379?text=${message}`, "_blank");
-    
-    //* Opcional: Rastrear clics en WhatsApp
-    track('click_whatsapp', {
-      seccion: activeSection
-    });
-  };
-
-  const handleEmailContact = () => {
-    scrollToSection(contactRef);
-    
-    //* Opcional: Rastrear clics en "Cotizar por Correo"
-    track('click_email_contact', {
-      seccion: activeSection
-    });
-  };
-
-  const scrollToSection = (ref) => {
-    window.scrollTo({
-      top: ref.current.offsetTop - 80,
-      behavior: "smooth",
-    });
-  };
+  function openWhatsApp(msg = "Hola, me interesa solicitar una cotización para equipos de bombeo. ¿Podrían ayudarme?") {
+    window.open(`https://wa.me/524273762379?text=${encodeURIComponent(msg)}`, "_blank");
+    track("click_whatsapp", { seccion: activeSection });
+  }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden box-border w-screen">
-      {/* Fondo de partículas */}
-      <Particles />
+    <div style={{ background: "var(--bg)", color: "var(--fg)", minHeight: "100vh", overflowX: "hidden" }}>
 
-      {/* Luz ambiental */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#BE171F] rounded-full blur-[150px] opacity-10 animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-[#F43F48] rounded-full blur-[100px] opacity-10 animate-pulse" />
-      </div>
-
-      {/* Botón WhatsApp */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
-        <button
-          onClick={handleWhatsApp}
-          className="bg-green-500 hover:bg-green-600 text-white p-3 sm:p-4 rounded-full shadow-2xl transition-transform hover:scale-110 animate-pulse"
-          aria-label="Contactar por WhatsApp"
-        >
-          <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-      </div>
-
-      {/* Navegación */}
-      <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-          scrollY > 50
-            ? "bg-[#0a0a0a]/95 backdrop-blur-md shadow-xl py-2"
-            : "bg-transparent py-3 sm:py-4"
-        }`}
+      {/* ── Floating WhatsApp ──────────────────────────── */}
+      <button
+        onClick={() => openWhatsApp()}
+        aria-label="Contactar por WhatsApp"
+        style={{
+          position: "fixed", bottom: 20, right: 20, zIndex: 50,
+          background: "#25D366", color: "#fff",
+          width: 52, height: 52, borderRadius: "50%", border: "none",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(37,211,102,.4)",
+          transition: "transform .15s",
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
+        onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
       >
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#BE171F] to-[#F43F48] rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-sm sm:text-base">
-                  MJ
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-                Motores Jordan
-              </span>
+        <FaWhatsapp size={24} />
+      </button>
+
+      {/* ── Header ────────────────────────────────────── */}
+      <header style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 40,
+        height: 66, background: "#0E0E0F",
+        borderBottom: scrolled ? "1px solid #232327" : "1px solid transparent",
+        transition: "border-color .2s",
+        display: "flex", flexDirection: "column",
+      }}>
+        <div style={{
+          flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%",
+          padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          {/* Logo */}
+          <button
+            onClick={() => scrollTo("hero")}
+            aria-label="Ir al inicio — Motores Jordan"
+            style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer" }}
+          >
+            <div style={{
+              width: 32, height: 32, background: "#D81F26",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <span style={{ color: "#fff", fontFamily: "'Saira Condensed',sans-serif", fontWeight: 800, fontSize: 18 }}>J</span>
             </div>
-            <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
-              {[
-                { label: "Servicios", ref: servicesRef, id: "services" },
-                { label: "Nosotros", ref: aboutRef, id: "about" },
-                { label: "Contacto", ref: contactRef, id: "contact" },
-              ].map(({ label, ref, id }) => (
-                <button
+            <div style={{ lineHeight: 1 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                <span style={{ fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", letterSpacing: 1 }}>MOTORES</span>
+                <span style={{ fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16, color: "#D81F26", letterSpacing: 1 }}>JORDAN</span>
+              </div>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: "#6A6A70", letterSpacing: 1, marginTop: 2 }}>
+                SISTEMAS DE BOMBEO
+              </div>
+            </div>
+          </button>
+
+          {/* Desktop nav — only shows sections with content */}
+          <nav aria-label="Navegación principal" style={{ alignItems: "center", gap: 4 }} className="hidden lg:flex">
+            {navLinks.map(({ label, id }, idx) => {
+              const active = activeSection === id;
+              return (
+                <NavLink
                   key={id}
-                  onClick={() => scrollToSection(ref)}
-                  className={`text-sm xl:text-base hover:text-[#BE171F] transition-colors ${
-                    activeSection === id ? "text-[#BE171F] font-bold" : ""
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+                  label={label}
+                  num={String(idx + 1).padStart(2, "0")}
+                  active={active}
+                  onClick={() => scrollTo(id)}
+                />
+              );
+            })}
+          </nav>
+
+          {/* Right: toggle + CTA */}
+          <div style={{ alignItems: "center", gap: 12 }} className="hidden lg:flex">
+            <ThemeToggle icon />
+            <button
+              onClick={() => openWhatsApp()}
+              aria-label="Solicitar cotización por WhatsApp"
+              style={{
+                background: "#D81F26", color: "#fff", border: "none", cursor: "pointer",
+                fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 14,
+                letterSpacing: 1, padding: "10px 22px", textTransform: "uppercase",
+                transition: "background .15s",
+                display: "flex", alignItems: "center", gap: 7,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = "#f02530"}
+              onMouseLeave={(e) => e.currentTarget.style.background = "#D81F26"}
+            >
+              <FaWhatsapp size={15} /> COTIZAR →
+            </button>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="lg:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuOpen}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#EDEDED" }}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </header>
+
+      {/* ── Caution stripe ────────────────────────────── */}
+      <div style={{ marginTop: 66 }}>
+        <div className="stripe-caution" />
+      </div>
+
+      {/* ── Mobile menu drawer ────────────────────────── */}
+      {menuOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 35, display: "flex" }}>
+          {/* Backdrop */}
+          <div
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.55)" }}
+            onClick={() => setMenuOpen(false)}
+          />
+          {/* Drawer from right */}
+          <div style={{
+            position: "absolute", top: 0, right: 0, bottom: 0, width: "min(300px,85vw)",
+            background: "var(--bg2)", borderLeft: "1px solid var(--line)",
+            display: "flex", flexDirection: "column", overflowY: "auto",
+            zIndex: 1,
+          }}>
+            {/* Drawer header */}
+            <div style={{
+              height: 66, display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "0 20px", borderBottom: "1px solid var(--line)", flexShrink: 0,
+            }}>
+              <div style={{ fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16, color: "var(--fg)", letterSpacing: 1 }}>
+                MENÚ
+              </div>
               <button
-                onClick={handleWhatsApp}
-                className="bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:shadow-lg transition-all text-sm sm:text-base"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Cerrar menú"
+                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--faint)", padding: 4 }}
               >
-                Cotizar
+                <X size={20} />
               </button>
             </div>
-            <button
-              className="lg:hidden text-white"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+
+            {/* Nav links */}
+            <nav aria-label="Menú móvil" style={{ flex: 1, padding: "4px 0" }}>
+              {navLinks.map(({ label, id }, idx) => {
+                const active = activeSection === id;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => scrollTo(id)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 14,
+                      width: "100%", textAlign: "left",
+                      padding: "13px 20px", background: active ? "rgba(216,31,38,.06)" : "none",
+                      border: "none", cursor: "pointer",
+                      borderLeft: active ? "3px solid #D81F26" : "3px solid transparent",
+                      transition: "background .15s, border-color .15s",
+                    }}
+                  >
+                    <span style={{
+                      fontFamily: "'Space Mono',monospace", fontSize: 9, fontWeight: 700,
+                      color: active ? "#D81F26" : "var(--faint)", letterSpacing: 1,
+                      minWidth: 20, flexShrink: 0,
+                    }}>
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{
+                      fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700,
+                      fontSize: 17, letterSpacing: 1.5, textTransform: "uppercase",
+                      color: active ? "#D81F26" : "var(--fg)",
+                      transition: "color .15s",
+                    }}>
+                      {label}
+                    </span>
+                    {active && (
+                      <span style={{
+                        marginLeft: "auto", fontFamily: "'Space Mono',monospace",
+                        fontSize: 10, color: "#D81F26",
+                      }}>←</span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Bottom actions */}
+            <div style={{ padding: "16px 20px", borderTop: "1px solid var(--line)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, color: "var(--faint)", letterSpacing: 1, textTransform: "uppercase" }}>TEMA</span>
+                <ThemeToggle icon />
+              </div>
+              <button
+                onClick={() => { openWhatsApp(); setMenuOpen(false); }}
+                aria-label="Solicitar cotización por WhatsApp"
+                style={{
+                  background: "#D81F26", color: "#fff", border: "none", cursor: "pointer",
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16,
+                  letterSpacing: 1, padding: "13px 16px", textTransform: "uppercase",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                }}
+              >
+                <FaWhatsapp size={17} /> COTIZAR POR WHATSAPP
+              </button>
+            </div>
           </div>
         </div>
-        {isMenuOpen && (
-          <div className="lg:hidden bg-[#0a0a0a]/95 backdrop-blur-md py-4 fixed top-16 inset-x-0">
-            <div className="max-w-screen-xl mx-auto px-6 space-y-2">
-              {[
-                { label: "Servicios", ref: servicesRef },
-                { label: "Nosotros", ref: aboutRef },
-                { label: "Contacto", ref: contactRef },
-              ].map(({ label, ref }) => (
-                <button
-                  key={label}
-                  onClick={() => {
-                    scrollToSection(ref);
-                    setIsMenuOpen(false);
-                  }}
-                  className="block w-full py-3 text-left hover:text-[#BE171F] border-b border-[#2e2e2e] transition-colors"
-                >
-                  {label}
-                </button>
-              ))}
-              <button
-                onClick={handleWhatsApp}
-                className="w-full mt-4 bg-gradient-to-r from-[#BE171F] to-[#F43F48] px-6 py-3 rounded-full hover:shadow-lg transition-all text-center"
-              >
-                <FaWhatsapp className="inline-block mr-2" />
-                Solicitar Cotización
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
-      <div className="h-16 sm:h-20 lg:h-24"></div>
+      )}
 
-      {/* Hero - fondo completo bajo el nav */}
+      {/* ── Hero ──────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex flex-col items-center justify-center min-h-[80vh] lg:min-h-screen pt-28 pb-12 lg:py-20 overflow-hidden"
+        id="hero"
+        className="section-pad"
+        style={{
+          background: "#0E0E0F",
+          minHeight: "calc(100vh - 72px)",
+          display: "flex", alignItems: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#1a1a1a] to-[#2a0a0e] opacity-90" />
+        {/* Subtle grid background */}
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          backgroundImage: "linear-gradient(#232327 1px, transparent 1px), linear-gradient(90deg, #232327 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+          opacity: 0.25,
+        }} />
 
-        {/* Tarjetas laterales */}
-        {showSideCards && (
-          <>
-            <div className="hidden xl:block absolute inset-y-0 left-0 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
-              <div className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 transition-all duration-300 hover:scale-[1.01] border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] flex-shrink-0">
-                <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl" />
-                <img
-                  src="/triangulo.png"
-                  alt="Ahorro de agua y energía"
-                  className="w-32 2xl:w-36 h-32 2xl:h-36 object-contain mx-auto mb-3"
-                />
-                <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-                  Potenciamos el ahorro de agua y energía
-                </h3>
-                <p className="text-xs 2xl:text-sm text-[#8E8F91] text-center mb-3">
-                  Tecnología avanzada que optimiza recursos y maximiza
-                  eficiencia
-                </p>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Droplet className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Reducción de consumo
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Hasta 40% menos de agua utilizada
-                      </p>
-                    </div>
+        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
+          <div style={{ maxWidth: 760 }}>
+
+            <span className="eyebrow anim-fade-in anim-delay-1">
+              // SISTEMAS DE BOMBEO · SAN JUAN DEL RÍO, QRO.
+            </span>
+
+            {/* Logo */}
+            <div className="anim-fade-up anim-delay-1" style={{ marginBottom: 32 }}>
+              <img
+                src="/logo.jpg"
+                alt="Motores Jordan"
+                style={{ height: 90, width: "auto", objectFit: "contain" }}
+              />
+            </div>
+
+            <h1 className="anim-fade-up anim-delay-2" style={{
+              fontFamily: "'Saira Condensed',sans-serif",
+              fontWeight: 800, fontSize: "clamp(44px,7vw,72px)",
+              lineHeight: 0.92, textTransform: "uppercase",
+              color: "#EDEDED", margin: 0, marginBottom: 8,
+            }}>
+              MOTO-BOMBAS<br />Y REDUCTORES
+            </h1>
+
+            <h2 className="anim-fade-up anim-delay-3" style={{
+              fontFamily: "'Saira Condensed',sans-serif",
+              fontWeight: 800, fontSize: "clamp(44px,7vw,72px)",
+              lineHeight: 0.92, textTransform: "uppercase",
+              color: "#D81F26", margin: 0, marginBottom: 28,
+            }}>
+              JORDAN S.A. DE C.V.
+            </h2>
+
+            <p className="anim-fade-up anim-delay-3" style={{
+              fontFamily: "'Archivo',sans-serif", fontSize: 17, fontWeight: 400,
+              lineHeight: 1.55, color: "#9A9A9E", maxWidth: 540, marginBottom: 36,
+            }}>
+              Especialistas en sistemas de bombeo, transmisión de potencia y motores eléctricos.
+              Más de 15 años sirviendo a la industria en Querétaro y México.
+            </p>
+
+            {/* CTAs */}
+            <div className="anim-fade-up anim-delay-4" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 56 }}>
+              <button
+                onClick={() => openWhatsApp()}
+                style={{
+                  background: "#D81F26", color: "#fff", border: "none", cursor: "pointer",
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16,
+                  letterSpacing: 1, padding: "15px 30px", textTransform: "uppercase",
+                  display: "flex", alignItems: "center", gap: 8,
+                  transition: "background .15s, transform .15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#f02530"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#D81F26"; e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                <FaWhatsapp size={18} /> COTIZAR POR WHATSAPP →
+              </button>
+              <button
+                onClick={() => scrollTo("catalogo")}
+                style={{
+                  background: "transparent", color: "#EDEDED",
+                  border: "1px solid #3A3A3F", cursor: "pointer",
+                  fontFamily: "'Saira Condensed',sans-serif", fontWeight: 700, fontSize: 16,
+                  letterSpacing: 1, padding: "15px 30px", textTransform: "uppercase",
+                  transition: "border-color .15s, color .15s, transform .15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#D81F26"; e.currentTarget.style.color = "#D81F26"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#3A3A3F"; e.currentTarget.style.color = "#EDEDED"; e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                VER CATÁLOGO →
+              </button>
+            </div>
+
+            {/* Trust row */}
+            <div className="anim-fade-up anim-delay-5" style={{ display: "flex", flexWrap: "wrap", gap: 0, borderTop: "1px solid #232327" }}>
+              {STATS.map((s, i) => (
+                <div
+                  key={i}
+                  style={{
+                    flex: "1 1 120px",
+                    padding: "20px 24px",
+                    borderRight: i < STATS.length - 1 ? "1px solid #232327" : "none",
+                  }}
+                >
+                  <div style={{
+                    fontFamily: "'Saira Condensed',sans-serif",
+                    fontWeight: 800, fontSize: 34, color: "#EDEDED",
+                    lineHeight: 1,
+                  }}>
+                    {s.number}
                   </div>
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Eficiencia energética
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Sistemas que reducen costos eléctricos
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Leaf className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Sostenibilidad
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Soluciones eco-amigables
-                      </p>
-                    </div>
+                  <div style={{
+                    fontFamily: "'Space Mono',monospace",
+                    fontSize: 10, fontWeight: 400, textTransform: "uppercase",
+                    color: "#9A9A9E", whiteSpace: "pre-line",
+                    marginTop: 4, lineHeight: 1.4,
+                  }}>
+                    {s.label}
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-            <div className="hidden xl:block absolute inset-y-0 right-2 flex items-center w-1/4 max-w-[20rem] px-2 sm:px-4 min-w-0 z-10">
-              <div className="group bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 transition-all duration-300 hover:scale-[1.01] border-2 border-[#2e2e2e] shadow-2xl relative overflow-hidden hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] flex-shrink-0">
-                <div className="absolute -top-20 -left-20 w-60 h-60 bg-[#BE171F] rounded-full opacity-10 blur-3xl" />
-                <img
-                  src="/Engranajes.png"
-                  alt="Excelencia en procesos"
-                  className="w-38 2xl:w-50 h-38 2xl:h-50 object-contain mx-auto mb-3"
-                />
+          </div>
+        </div>
 
-                <h3 className="text-base 2xl:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-                  Excelencia en procesos
-                </h3>
-                <p className="text-xs 2xl:text-sm text-[#8E8F91] text-center mb-3">
-                  Sistemas robustos y soluciones confiables
-                </p>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Award className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Calidad garantizada
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Materiales de primera calidad
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Tecnología avanzada
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Sistemas de última generación
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2.5 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors">
-                    <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        Soporte experto
-                      </p>
-                      <p className="text-xs text-[#8E8F91]">
-                        Equipo técnico especializado y respaldo de fábrica
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Contenido central */}
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto w-full min-w-0">
-          <div className="mx-auto mb-5 sm:mb-7 max-w-md w-full bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 shadow-xl border border-[#2e2e2e] transition-all hover:scale-[1.02]">
+        {/* Hero right side image (desktop) */}
+        <div
+          className="hidden xl:block anim-fade-in anim-delay-3"
+          style={{
+            position: "absolute", right: 56, top: "50%", transform: "translateY(-50%)",
+            width: "36%", maxWidth: 480, pointerEvents: "none",
+          }}
+        >
+          {heroImage && (
             <img
-              src="/logo.jpg"
-              alt="Logo Jordan"
-              className="w-full h-auto object-contain max-h-32 sm:max-h-40 lg:max-h-48"
+              src={heroImage}
+              alt=""
+              style={{ width: "100%", height: "auto", objectFit: "contain", opacity: 0.55, display: "block" }}
             />
-          </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
-            Moto-Bombas y Reductores
-            <br />
-            <span className="bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-              Jordan S.A. de C.V.
-            </span>
-          </h1>
-          <p className="text-sm sm:text-base lg:text-lg text-[#8E8F91] mb-5 sm:mb-6 max-w-2xl mx-auto">
-            Soluciones profesionales en sistemas de bombeo y transmisión de
-            potencia con{" "}
-            <span className="text-[#BE171F] font-semibold">
-              tecnología de vanguardia
-            </span>
-          </p>
-
-          {/* Botones de acción */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 max-w-2xl mx-auto">
-            <button
-              onClick={handleWhatsApp}
-              className="flex items-center justify-center gap-2 flex-1 bg-gradient-to-r from-[#BE171F] to-[#F43F48] py-3 px-6 rounded-full font-semibold text-sm lg:text-base border-2 border-transparent transform hover:scale-[1.03] hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] transition duration-300 min-h-[48px]"
-            >
-              <FaWhatsapp className="w-5 h-5" />
-              Contáctanos por WhatsApp
-            </button>
-            <button
-              onClick={handleEmailContact}
-              className="flex items-center justify-center gap-2 flex-1 bg-gray-800 text-white py-3 px-6 rounded-full font-semibold text-sm lg:text-base border-2 border-transparent transform hover:scale-[1.03] hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] transition duration-300 min-h-[48px]"
-            >
-              <MdEmail className="w-5 h-5" />
-              Cotizar por Correo
-            </button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8 max-w-screen-xl mx-auto w-full">
-            {stats.map((s, i) => (
-              <div
-                key={i}
-                className="group flex flex-col items-center p-3 sm:p-4 lg:p-5 bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60 backdrop-blur-lg border-2 border-[#2e2e2e]/70 shadow-xl transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] min-h-[80px] sm:min-h-[90px] min-w-0"
-              >
-                <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-1 sm:mb-2 bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-                  {s.number}
-                </div>
-                <div className="text-xs sm:text-sm uppercase tracking-wider text-[#8E8F91] text-center">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-w-screen-xl mx-auto w-full">
-            {features.map((f, i) => (
-              <div
-                key={i}
-                className="group flex flex-col items-center text-center p-4 sm:p-5 lg:p-6 bg-gradient-to-b from-[#0f0f0f]/60 to-[#1a1a1a]/60 backdrop-blur-lg border-2 border-[#2e2e2e]/70 shadow-xl transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A] min-h-[140px] sm:min-h-[160px] min-w-0"
-              >
-                <div className="w-12 h-12 mb-3 sm:mb-4 flex items-center justify-center rounded-full bg-[#FF073A]/80 transition-transform duration-300 group-hover:scale-110 flex-shrink-0">
-                  {React.cloneElement(f.icon, {
-                    className: "w-6 h-6 text-white",
-                  })}
-                </div>
-                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-2 sm:mb-3">
-                  {f.title}
-                </h3>
-                <p className="text-xs sm:text-sm lg:text-base text-[#8E8F91] leading-relaxed">
-                  {f.description}
-                </p>
-                <span className="mt-3 sm:mt-4 w-12 h-1 rounded-full bg-gradient-to-r from-[#BE171F] to-[#F43F48] opacity-60 group-hover:opacity-100 transition-opacity duration-300"></span>
-              </div>
-            ))}
-          </div>
+          )}
         </div>
       </section>
 
-      {/* Mobile Cards */}
-      <div className="xl:hidden relative z-10 w-full max-w-2xl mx-auto mt-6 px-4 flex flex-col gap-4 pb-10">
-        {[
-          {
-            img: "/triangulo.png",
-            title: "Potenciamos el ahorro de agua y energía",
-            text: "Tecnología avanzada que optimiza recursos y maximiza eficiencia",
-            features: [
-              {
-                Icon: Droplet,
-                title: "Reducción de consumo",
-                text: "Hasta 40% menos de agua utilizada",
-              },
-              {
-                Icon: Zap,
-                title: "Eficiencia energética",
-                text: "Sistemas que reducen costos eléctricos",
-              },
-              {
-                Icon: Leaf,
-                title: "Sostenibilidad",
-                text: "Soluciones eco-amigables",
-              },
-            ],
-          },
-          {
-            img: "/Engranajes.png",
-            title: "Excelencia en procesos",
-            text: "Sistemas robustos y soluciones fiables",
-            features: [
-              {
-                Icon: Award,
-                title: "Calidad garantizada",
-                text: "Materiales de primera calidad",
-              },
-              {
-                Icon: Zap,
-                title: "Tecnología avanzada",
-                text: "Sistemas de última generación",
-              },
-              {
-                Icon: Users,
-                title: "Soporte experto",
-                text: "Equipo técnico especializado",
-              },
-            ],
-          },
-        ].map((c, i) => (
-          <div
-            key={i}
-            className="group w-full bg-gradient-to-b from-[#0f0f0f] to-[#1a1a1a] rounded-2xl p-4 sm:p-5 shadow-xl border-2 border-[#2e2e2e] transition-all duration-300 hover:border-[#FF073A] hover:shadow-[0_0_8px_#FF073A]"
-          >
-            <img
-              src={c.img}
-              alt=""
-              className="mx-auto mb-3 w-28 sm:w-32 h-auto object-contain"
-            />
-            <h3 className="text-base sm:text-lg font-bold mb-2 text-center bg-clip-text text-transparent from-[#BE171F] to-[#F43F48] bg-gradient-to-r">
-              {c.title}
-            </h3>
-            <p className="text-xs sm:text-sm text-[#8E8F91] text-center mb-4">
-              {c.text}
-            </p>
-            <div className="space-y-2">
-              {c.features.map((f, j) => (
-                <div
-                  key={j}
-                  className="flex items-start gap-3 p-2.5 sm:p-3 border-2 border-[#2e2e2e] rounded-lg group-hover:border-[#FF073A] transition-colors"
-                >
-                  <div className="w-7 h-7 bg-[#FF073A] rounded-full flex items-center justify-center">
-                    <f.Icon className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs sm:text-sm font-semibold text-white">
-                      {f.title}
-                    </p>
-                    <p className="text-xs text-[#8E8F91]">{f.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Secciones auxiliares */}
-      <div ref={servicesRef} className="mx-auto px-4">
-        <Servicios />
-      </div>
-      <div ref={aboutRef} className="mx-auto px-4">
-        <Nosotros />
-      </div>
-      <div ref={contactRef} className="mx-auto px-4">
-        <Contacto />
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-black border-t border-[#4E4F50] py-6 sm:py-8">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 text-center text-[#8E8F91]">
-          <h4 className="text-lg sm:text-xl font-bold mb-1.5">
-            Moto-Bombas y Reductores Jordan
-          </h4>
-          <p className="mb-3 text-sm">
-            Potenciando el bombeo, control y potencia de tus proyectos desde
-            2011.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mb-4 text-xs sm:text-sm">
-            <button onClick={() => scrollToSection(servicesRef)}>
-              Servicios
-            </button>
-            <button onClick={() => scrollToSection(aboutRef)}>Nosotros</button>
-            <button onClick={() => scrollToSection(contactRef)}>
-              Contacto
-            </button>
-            <button onClick={handleWhatsApp}>Cotizar</button>
-          </div>
-          <p className="text-xs text-[#6B6C6F]">
-            &copy; 2025 Moto-Bombas y Reductores Jordan S.A. de C.V. Todos los
-            derechos reservados.
-          </p>
-        </div>
-      </footer>
+      {/* ── Sections ──────────────────────────────────── */}
+      <main id="main-content">
+      <MisionVision />
+      <div ref={servicesRef}><Servicios /></div>
+      <ClientesIndustriales />
+      <ImageCarousel
+        title="Motores Eléctricos"
+        eyebrow="// CATÁLOGO"
+        folder="motores"
+        subtitle="Motores eléctricos de alta eficiencia para todo tipo de aplicación industrial."
+      />
+      <ImageCarousel
+        title="Bombas"
+        eyebrow="// CATÁLOGO"
+        folder="bombas"
+        subtitle="Amplio catálogo de bombas para industria, riego, contra incendio y uso doméstico."
+      />
+      <ImageCarousel
+        title="Refacciones Originales y Universales"
+        eyebrow="// CATÁLOGO"
+        folder="refacciones"
+        subtitle="Refacciones genuinas y universales para el mantenimiento de tu equipo."
+      />
+      <BannersSection onLoad={() => {}} />
+      <div ref={catalogoRef}><CatalogoDestacado onLoad={(v) => markVisible("catalogo", v)} /></div>
+      <div ref={promocionesRef}><PromocionesSection onLoad={(v) => markVisible("promociones", v)} /></div>
+      <div ref={galeriaRef}><GaleriaSection onLoad={(v) => markVisible("galeria", v)} /></div>
+      <div ref={articulosRef}><ArticulosSection onLoad={(v) => markVisible("articulos", v)} /></div>
+      <SectoresSection />
+      <div ref={aboutRef}><Nosotros /></div>
+      <Testimonios />
+      <ReviewForm />
+      <div ref={contactRef}><Contacto /></div>
+      </main>
+      <Footer />
     </div>
   );
 }

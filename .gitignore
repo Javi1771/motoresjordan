@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+/public/uploads/*
+!/public/uploads/.gitkeep
+/dev.db
+/dev.db-journal
+/prisma/*.db
 
 # vercel
 .vercel
@@ -41,3 +46,14 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+tarea.md
+tarea2.md
+tarea3.md
+tarea4.md
+.agents
+.claude
+DESING.md
+/graphify-out
+.github
+.qodo
+ARQUITECTURA-DEPLOY.md
