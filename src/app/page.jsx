@@ -139,7 +139,7 @@ export default function Home() {
       if (found !== activeSection) {
         setActiveSection(found);
         window.history.replaceState({}, "", found === "hero" ? "/" : `/#${found}`);
-        track("pageview", { path: found === "hero" ? "/" : `/#${found}` });
+        track("section_view", { path: found === "hero" ? "/" : `/#${found}` });
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
